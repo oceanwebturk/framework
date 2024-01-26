@@ -1,0 +1,17 @@
+<?php
+namespace {NAMESPACE};
+defined("REAL_BASE_DIR") or die;
+/**
+ * {CLASS_NAME} Controller
+ *
+ * @package {NAMESPACE}
+ */
+use OceanWT\Http\Controller;
+class {CLASS_NAME} extends Controller{
+  /**
+   * Index Method
+   */
+  public function index(){
+   //
+  }
+}

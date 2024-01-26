@@ -1,0 +1,28 @@
+{
+  "name": "oceanwebturk/framework",
+  "description": "The OceanWebTurk Framework",
+  "keywords":["oceanwebturk","framework"],
+  "license": "MIT",
+  "type":"library",
+  "homepage":"https://github.com/oceanwebturk/framework",
+  "support":{
+    "source": "https://github.com/oceanwebturk/framework"
+  },
+  "config":{
+    "optimize-autoloader": true,
+    "preferred-install": "dist",
+    "sort-packages": true,
+    "classmap-authoritative": true
+  },
+  "require":{
+    "php": ">=7.4"
+  },
+  "autoload":{
+    "psr-4":{
+      "OceanWT\\":"./src/"
+    },
+    "files":["./bootstrap.php","./src/Support/helpers.php","./src/Http/helpers.php"]
+   },
+  "minimum-stability":"dev",
+  "prefer-stable":true
+}

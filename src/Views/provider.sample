@@ -1,0 +1,19 @@
+<?php
+namespace {NAMESPACE};
+defined("REAL_BASE_DIR") or die;
+/**
+ * {CLASS_NAME} Provider
+ *
+ * @package {NAMESPACE}
+ */
+use OceanWT\Support\ServiceProvider;
+class {CLASS_NAME} extends ServiceProvider
+{
+ /**
+  * @return void
+  */
+ public function boot()
+ {
+  //
+ }
+}
