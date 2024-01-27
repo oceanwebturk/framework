@@ -117,8 +117,8 @@ class OceanWT extends Container
       }
      }
      self::$app->autoloader->register();
+     self::$serviceProviders=array_merge(Config::get("app")->providers,(new PackageManifest)->providers());     
      do_action("system_init");
-     self::$serviceProviders=array_merge(Config::get("app")->providers,(new PackageManifest)->providers());
     }
 
     /**
@@ -127,17 +127,14 @@ class OceanWT extends Container
     public function run(string $routeMode=null)
     {
      self::init();
-
      if(!Config::get("view")->default || Config::get("view")->default=="view"){
       self::templateEngine([(new TemplateEngine()),'render']);
      }elseif(Config::get("view")->engines[Config::get("view")->default]){
       self::templateEngine(Config::get("view")->engines[Config::get("view")->default]);
      }
-
      if(isset(GET_CONFIGS['composer_autoload']) && GET_CONFIGS['composer_autoload']==true && file_exists(GET_DIRS['VENDOR'].'autoload.php')){
       include(GET_DIRS['VENDOR'].'autoload.php');
      }
-
      if(Config::get("app")->mode=="development"){
       if(is_cli()){
        set_error_handler("\OceanWT\Console::errorHandler");

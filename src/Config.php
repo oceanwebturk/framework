@@ -12,6 +12,7 @@ class Config
     public static $paths = [
      GET_DIRS['CONFIGS'],
      'root'=>REAL_BASE_DIR,
+     'owt-framework-etc'=>GET_DIRS['SYSTEM'].'../etc/'
     ];
 
     /**
@@ -36,8 +37,8 @@ class Config
      */
     public static function addPath($path,$prefix=null)
     {
-        self::$paths[$prefix] = $path;
-        return new self();
+      self::$paths[$prefix] = $path;
+      return new self();
     }
 
     /**

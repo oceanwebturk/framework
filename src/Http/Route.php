@@ -13,6 +13,11 @@ class Route
      * @var array
      */
     public static $routes = [],$configs = [],$groupOptions = [];
+    
+    /**
+     * @var array
+     */
+    public static $filters=[];
 
     /**
      * @var string|object
@@ -35,6 +40,7 @@ class Route
     public function __construct()
     {
      self::$configs=Config::default(__NAMESPACE__.'\DefaultRoute')->get("routing");
+     self::$filters=array_merge((Array) Config::get("owt-framework-etc::filters"),Config::get("filters")->aliases);
     }
 
     /**
@@ -175,8 +181,8 @@ class Route
       if(isset($props['options']['filters'])){
        $filters=$props['options']['filters'];
        array_map(function($filter){
-        if(class_exists(Config::get("filters")->aliases[$filter])){
-         $class=Config::get("filters")->aliases[$filter];
+        if(class_exists(self::$filters[$filter])){
+         $class=self::$filters[$filter];
          $class=new $class();
          $this->filter_get($class);
         }
