@@ -45,9 +45,9 @@ class Migration
   $args=isset($vars['connection']) && isset(DB::$connections[$vars['connection']]) ? DB::$connections[$vars['connection']] : DB::$defaultConnect;
   $tableName=Request::security((isset($vars['prefix']) ? $vars['prefix'] : $args['prefix']).(isset($this->table) ? $this->table : $vars['table']),true);
   $sql="CREATE TABLE IF NOT EXISTS ".$tableName." (";
-  $sql.=implode(",",$this->parseColumns()).implode(",",$this->getAllKeys());
+  $sql.=implode(",",array_merge($this->parseColumns(),$this->getAllKeys()));
   $sql.='
-  ) ENGINE = INNODB DEFAULT CHARSET='.(isset($args['charset']) ? $args['charset'] : 'utf8mb4').' COLLATE '.(isset($args['collate']) ? $args['collate'] : 'utf8mb4_general_ci');
+  ) ENGINE=INNODB DEFAULT CHARSET='.(isset($args['charset']) ? $args['charset'] : 'utf8mb4').' COLLATE '.(isset($args['collate']) ? $args['collate'] : 'utf8mb4_turkish_ci').';';
   $sql=trim($sql,',');
   $this->build($sql);
   $this->emptyVaribles();
@@ -65,7 +65,7 @@ class Migration
   }
   foreach(self::$keys['uniqueKeys']as$uniqueKey){
    $sql[]='
-   UNIQUE KEY `'.$uniqueKey.'`';
+   UNIQUE KEY(`'.$uniqueKey.'`)';
   }
   return $sql;
  }
@@ -89,7 +89,6 @@ class Migration
   */
  private function build(string $query)
  {
-  //echo $query;
   DB::query($query)->run();
  }
 
@@ -131,6 +130,6 @@ class Migration
  {
   $args=isset($vars['connection']) && isset(DB::$connections[$vars['connection']]) ? DB::$connections[$vars['connection']] : DB::$defaultConnect;
   $tableName=Request::security((isset($vars['prefix']) ? $vars['prefix'] : $args['prefix']).(isset($this->table) ? $this->table : $vars['table']),true);
-  DB::query("DROP TABLE ".$tableName)->run();
+  return ["tableName"=>$tableName,"sql"=>"DROP TABLE ".$tableName];
  }
 }

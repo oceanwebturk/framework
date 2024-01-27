@@ -1,0 +1,30 @@
+<?php
+
+use OceanWT\Database\Migration;
+
+return new class extends Migration{
+ /**
+  * @var string
+  */
+ protected $table="{TABLE_NAME}";
+
+ /**
+  * @return void
+  */
+ public function up(): void
+ {
+  $this->int("id");
+  $this->string("name")->length(255);
+  $this->primaryKey('id');
+  $this->uniqueKey("name");
+  $this->create();
+ }
+
+ /**
+  * @return array
+  */
+ public function down(): array
+ {
+   return $this->drop();
+ }
+};

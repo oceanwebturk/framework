@@ -3,6 +3,7 @@
 namespace OceanWT\Database;
 
 use OceanWT\Command;
+use OceanWT\Support\Filesystem;
 
 class DatabaseCommand extends Command
 {
@@ -28,6 +29,7 @@ class DatabaseCommand extends Command
   */
  public function migrate()
  {
+  new DB();
   $paths=Migration::getPaths();
   for($i=0;$i<count($paths);$i++){
    $path=$paths[$i];
@@ -50,6 +52,7 @@ class DatabaseCommand extends Command
   */
  public function migrate_rollback() : void
  {
+  new DB();
   $paths=Migration::getPaths();
   for($i=0;$i<count($paths);$i++){
    $path=$paths[$i];
@@ -60,7 +63,8 @@ class DatabaseCommand extends Command
      if(!method_exists($class,'down')){
       throw new \Exception(sprintf(lang("system::method_not_found"),$path.$dir."::down()"));
      }
-     $class->down();
+     DB::query($class->down()['sql'])->run();
+     $this->write("\n  ".sprintf(lang("system::migrate_roolbacked_message"),$class->down()['tableName'])."\n");
     }
    }
   }
@@ -71,8 +75,12 @@ class DatabaseCommand extends Command
   */
  public function migration(array $params=[])
  {
+  // php console make:migration posts
   $migration_name=$params[2];
-  $migration_sample=__DIR__.'/samples/migration.sample';
+  $migration_sample=file_get_contents(__DIR__.'/samples/migration.sample');
   $migration_file=GET_DIRS['MIGRATIONS'].date("dmY_His")."_".$migration_name."_table.php";
+  $content=str_replace("{TABLE_NAME}",$migration_name,$migration_sample);
+  Filesystem::createFile($migration_file,$content);
+  $this->write("\n  ".sprintf(lang("system::created_message"),ucfirst(lang("system::public")['migration']),$migration_file)."\n");
  }
 }
