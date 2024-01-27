@@ -3,3 +3,4 @@
 /vendor
 /.vsocde
 composer.lock
+*.sublime-workspace
