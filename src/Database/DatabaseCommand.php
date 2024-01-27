@@ -75,7 +75,6 @@ class DatabaseCommand extends Command
   */
  public function migration(array $params=[])
  {
-  // php console make:migration posts
   $migration_name=$params[2];
   $migration_sample=file_get_contents(__DIR__.'/samples/migration.sample');
   $migration_file=GET_DIRS['MIGRATIONS'].date("dmY_His")."_".$migration_name."_table.php";
