@@ -20,7 +20,7 @@ class Import
 
  public function __construct()
  {
-  self::$engines=Config::get("view")->engines;
+  self::$engines=array_merge((Array) Config::get("owt-framework-etc::templateEngines"),Config::get("view")->engines);
  }
 
  /**
@@ -49,8 +49,8 @@ class Import
   */
  public static function custom_view(string $file,array $data = [])
  {
-     extract($data);
-     include($file);
+  extract($data);
+  include($file);
  }
  
  /**
@@ -64,7 +64,7 @@ class Import
     $ex=explode("::",$name);
     if($configs=self::$paths[$ex[0]]){
      $engine=isset(self::$engines[$configs['templateEngine']]) ? self::$engines[$configs['templateEngine']] : [TemplateEngine::class,'render'];
-     OceanWT::$defines['VIEWS']=$configs['path'];
+     $GLOBALS['_OCEANWEBTURK']['CURRENT_VIEW_PATH']=$configs['path'];
      $name=$ex[1];
     }
    }

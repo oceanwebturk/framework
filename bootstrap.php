@@ -2,7 +2,7 @@
 
 define("OCEANWT_VERSION", "2.0");
 define("REQUIRED_PHP_VERSION","7.4");
-
+$GLOBALS['_OCEANWEBTURK'] = [];
 if(!function_exists("request_uri")){
 function request_uri($path = __DIR__)
 {

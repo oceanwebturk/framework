@@ -29,6 +29,11 @@ class OceanWT extends Container
      * @var array
      */
     public static $serviceProviders = [];
+    
+    /**
+     * @var string
+     */
+    public static $projectType="FS";
 
     /**
      * @param string|null $rootDir
@@ -81,6 +86,15 @@ class OceanWT extends Container
         self::$application = $app;
         return new self();
     }
+    
+    /**
+     * @param string $projectType
+     */
+    public static function projectType(string $projectType)
+    {
+     self::$projectType=$projectType;
+     return new self;
+    }
 
     /**
      * @return void
@@ -107,6 +121,7 @@ class OceanWT extends Container
     public static function init()
     {
      !defined("REAL_BASE_DIR") ? define('REAL_BASE_DIR', self::$basePath) : '';
+     !defined("PROJECT_TYPE") ? define('PROJECT_TYPE', self::$projectType) : '';
      !defined("GET_DIRS") ? define('GET_DIRS', self::getPaths()) : '';
      !defined("GET_NAMESPACES") ? define('GET_NAMESPACES', self::getNamespaces()) : '';
      !defined("GET_CONFIGS") ? define('GET_CONFIGS', self::getConfigs()) : '';
@@ -179,9 +194,8 @@ class OceanWT extends Container
        "DIRECTORY_ROOT" => "public/",
        "CONFIGS" => REAL_BASE_DIR."etc/",
        "VENDOR" => REAL_BASE_DIR."vendor/",
-       "SYSTEM" => __DIR__."/",
        "LOGS" => $paths["VAR"]."logs/",
-       "VIEWS" => $paths["VAR"]."html/",
+       "VIEWS" => isset($GLOBALS['_OCEANWEBTURK']['CURRENT_VIEW_PATH']) ? $GLOBALS['_OCEANWEBTURK']['CURRENT_VIEW_PATH'] : $paths["VAR"]."html/",
        "LANGS" => $paths["VAR"]."langs/",
        "CACHES" => $paths["VAR"]."cache/",
        "MODELS" => $paths["APP"]."Models/",
@@ -189,6 +203,7 @@ class OceanWT extends Container
        "SERVICES" => $paths["APP"]."Providers/",
        "CONTROLLERS" => $paths["APP"]."Controllers/",
        "MIGRATIONS" => $paths['DATABASE']."migrations/",
+       "SYSTEM" => __DIR__."/",
      ]+(self::getApplication() && is_callable([self::getApplication(),"paths"]) ? call_user_func([self::getApplication(),"paths"]) : []);
     }
 
