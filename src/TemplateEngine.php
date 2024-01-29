@@ -14,6 +14,11 @@ class TemplateEngine
     public static function render($name, $data = [])
     {
      extract($data);
-     include(GET_DIRS["VIEWS"].$name.".php");
+     if(is_array($name)) {
+      $file=$name['path'].$name['file'];
+     }else{
+      $file=GET_DIRS["VIEWS"].$name;
+     }
+     include($file.".php");
     }
 }

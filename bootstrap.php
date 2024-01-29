@@ -1,6 +1,6 @@
 <?php
 
-define("OCEANWT_VERSION", "2.0");
+define("OCEANWT_VERSION", "1.0");
 define("REQUIRED_PHP_VERSION","7.4");
 $GLOBALS['_OCEANWEBTURK'] = [];
 if(!function_exists("request_uri")){
@@ -42,16 +42,6 @@ if(!function_exists("is_cli")){
  }
 }
 
-if(defined('MANUAL_AUTOLOAD')){
-require(__DIR__.'/Autoloader.php');
-$autoload=new OceanWT\Autoloader();
-$autoload->addNamespace('OceanWT\\',__DIR__.'/');
-$autoload->register();
-
-include(__DIR__.'/src/Http/helpers.php');
-include(__DIR__.'/src/Support/helpers.php');
-}
-
 if(!function_exists("dd")){
  function dd($text){
   return OceanWT\Output::write($text);
@@ -59,6 +49,7 @@ if(!function_exists("dd")){
 }
 
 use OceanWT\Hook;
+use OceanWT\Http\Route;
 use OceanWT\Support\Lang;
 
 if(!function_exists("app")){
@@ -68,37 +59,43 @@ if(!function_exists("app")){
 }
 
 if(!function_exists("view")){
- function view($name, $data = array()){
+ function view(string $name,array $data = array()){
    \OceanWT\Import::view($name, $data);
  }
 }
 
+if(!function_exists("route")){
+ function route(string $name,array $data = array()){
+   return Route::url($name, $data);
+ }
+}
+
 if(!function_exists("config")){
- function config($config){
+ function config(string $config){
   return \OceanWT\Config::get($config);
  }
 }
 
 if(!function_exists("do_action")){
- function do_action($name, $args = array()){
+ function do_action(string $name,array $args = array()){
   Hook::trigger($name, $args);
  }
 }
 
 if(!function_exists("add_action")){
- function add_action($name, $callback){
+ function add_action(string $name,string|callable $callback){
     Hook::add($name, $callback);
  }
 }
 
 if(!function_exists("remove_action")){
- function remove_action($name, $callback){
+ function remove_action(string $name,string|callable $callback){
      Hook::remove($name, $callback);
  }
 }
 
 if(!function_exists("lang")){
- function lang($name){
+ function lang(string $name){
   return Lang::get($name);
  }
 }

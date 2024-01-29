@@ -20,7 +20,7 @@ class Import
 
  public function __construct()
  {
-  self::$engines=array_merge((Array) Config::get("owt-framework-etc::templateEngines"),Config::get("view")->engines);
+  self::$engines=(Array) Config::get("owt-framework-etc::templateEngines");
  }
 
  /**
@@ -63,16 +63,28 @@ class Import
    if(strpos($name,"::")){
     $ex=explode("::",$name);
     if($configs=self::$paths[$ex[0]]){
-     $engine=isset(self::$engines[$configs['templateEngine']]) ? self::$engines[$configs['templateEngine']] : [TemplateEngine::class,'render'];
-     $GLOBALS['_OCEANWEBTURK']['CURRENT_VIEW_PATH']=$configs['path'];
-     $name=$ex[1];
+     $engine=self::$engines[$configs['templateEngine']];
+     $name=['path'=>$configs['path'],'file'=>$ex[1]];
     }
    }
    $data=array_merge($data,self::$shareds);
    if(is_array($engine)){
     echo @call_user_func_array([$engine[0],$engine[1]],[$name,$data]);
+   }elseif(is_string($engine)){
+    echo call_user_func_array(self::$engines[$engine],[$name,$data]);
    }elseif(is_callable($engine)){
     echo call_user_func_array($engine,[$name,$data]);
    }
+ }
+
+ public static function render($name, $data = [])
+ {
+  extract($data);
+  if(is_array($name)) {
+   $file=$name['path'].$name['file'];
+  }else{
+   $file=GET_DIRS["VIEWS"].$name;
+  }
+  include($file.".php");
  }
 }

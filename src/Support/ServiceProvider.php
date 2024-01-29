@@ -3,6 +3,7 @@
 namespace OceanWT\Support;
 
 use OceanWT\Import;
+use OceanWT\Lang;
 
 class ServiceProvider
 {
@@ -74,8 +75,15 @@ class ServiceProvider
      * @param string $namespace
      * @param string $templateEngine
      */
-    public static function loadViews(string $path,string $namespace,string $templateEngine='view')
+    public static function loadViews(string $path,string $namespace,string $templateEngine='system')
     {
+     foreach(Import::$paths as$folder){
+      $folder=is_array($folder) ? $folder['path'] : $folder;
+      $dir=$folder.'vendor/'.$namespace.'/';
+      if(is_dir($dir)){
+        $path=$dir;
+      }
+     }
      Import::$paths[$namespace]=['path'=>$path,'templateEngine'=>$templateEngine];
     }
 

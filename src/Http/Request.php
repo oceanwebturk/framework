@@ -53,12 +53,12 @@ class Request
      */
     public static function security($data, $st = false)
     {
-        if($st) {
-            return strip_tags($data);
-        } else {
-            return $data;
-        }
-        return $data;
+     if($st) {
+      return trim(addslashes(htmlspecialchars(strip_tags($data))));
+     } else {
+      return trim(addslashes(htmlspecialchars($data)));
+     }
+     return $data;
     }
     
     /**

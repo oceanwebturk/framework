@@ -104,8 +104,9 @@ class Route
     protected static function createPattern($pattern): string
     {
      foreach(self::$patterns as$key=>$value){
-      return preg_replace('#^'.$key.'$#',$value,$pattern);
+      $path=preg_replace('#^'.$key.'$#',$value,$pattern);
      }
+     return $path;
     }
 
     /**
@@ -120,7 +121,7 @@ class Route
      $controller=self::$controller;
      self::$method=$method;
      $options=array_merge(self::$groupOptions,$options);
-     self::$routes[self::createPattern((isset($options['prefix']) ? $options['prefix'] : (isset(self::$prefix) ? self::$prefix : '')).$uri)] = [
+     self::$routes[((isset($options['prefix']) ? $options['prefix'] : (isset(self::$prefix) ? self::$prefix : '')).$uri)] = [
       'action' => (in_array(gettype($controller),["object","string"],true) ? $controller."::".$action : $action),
       'options' => $options,
       'methods' => $method
@@ -167,17 +168,38 @@ class Route
     self::$patterns['{:'.$name.'[0-9]?}']='(['.$pattern.']+)';
     return new self;
    }
+   
+   /**
+    * @param string $name
+    * @param array $params
+    */
+   public static function url(string $name,array $params=[])
+   {
+    $route=array_key_last(array_filter(self::$routes,function($route)use($name){
+     return isset($route['options']['as']) && $route['options']['as'] === $name;
+    }));
+    return public_url().str_replace(array_map(function($key){
+     return '{:'.$key.'}';
+    },array_keys($params)),array_values($params),ltrim($route,'/'));
+   }
 
    public function run()
    {
-    $url = Request::security(Request::getUrl(),true);
+    $url = str_replace(array_keys(self::$configs->uriReplaceCharacters),array_values(self::$configs->uriReplaceCharacters),urldecode(Request::security(Request::getUrl(),true)));
+    echo str_replace(array_keys(self::$configs->uriReplaceCharacters),array_values(self::$configs->uriReplaceCharacters),urldecode(Request::security("http://localhost:8008/devtools/assets?file=../routes.php",true)))."<br>";
     foreach(self::$routes as$path => $props) {
+     foreach(self::$patterns as$key=>$value){
+      $path=preg_replace('#^'.$key.'$#',$value,$path);
+     }
      $pattern = '#^'.$path.'$#';
      $method=is_string($props['methods']) ? [$props['methods']] : $props['methods'];
      if(preg_match($pattern,$url,$params) && in_array($_SERVER['REQUEST_METHOD'],$method)) {
       http_response_code(200);
       array_shift($params);
       $action = $props['action'];
+      if(isset($props['options']['minify'])){
+       $GLOBALS['_OCEANWEBTURK']['MINIFY'] = $props['options']['minify'];
+      }
       if(isset($props['options']['filters'])){
        $filters=$props['options']['filters'];
        array_map(function($filter){

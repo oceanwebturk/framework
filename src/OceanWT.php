@@ -19,6 +19,11 @@ class OceanWT extends Container
      * @var string
      */
     public static $basePath;
+    
+    /**
+     * @var string
+     */
+    public static $projectType="FS";
 
     /**
      * @var array
@@ -28,13 +33,8 @@ class OceanWT extends Container
     /**
      * @var array
      */
-    public static $serviceProviders = [];
+    public static $serviceProviders = [],$supportedProjectTypes = ["FS","EP"];
     
-    /**
-     * @var string
-     */
-    public static $projectType="FS";
-
     /**
      * @param string|null $rootDir
      */
@@ -101,7 +101,6 @@ class OceanWT extends Container
      */
     protected function registerBaseBindings(): void
     {
-     ini_set("default_charset","UTF-8");
      static::setInstance($this);
      $this->instance('app',$this);
      $this->instance(Container::class,$this);
@@ -120,18 +119,10 @@ class OceanWT extends Container
      */
     public static function init()
     {
-     !defined("REAL_BASE_DIR") ? define('REAL_BASE_DIR', self::$basePath) : '';
-     !defined("PROJECT_TYPE") ? define('PROJECT_TYPE', self::$projectType) : '';
-     !defined("GET_DIRS") ? define('GET_DIRS', self::getPaths()) : '';
-     !defined("GET_NAMESPACES") ? define('GET_NAMESPACES', self::getNamespaces()) : '';
-     !defined("GET_CONFIGS") ? define('GET_CONFIGS', self::getConfigs()) : '';
-     foreach(GET_NAMESPACES as$nKey => $nVal) {
-      self::$app->autoloader->addNamespace($nKey, $nVal);
-      if(isset(GET_DIRS[$nKey])) {
-       self::$app->autoloader->addNamespace(GET_NAMESPACES[$nKey], GET_DIRS[$nKey]);
-      }
-     }
-     self::$app->autoloader->register();
+     ini_set("default_charset","UTF-8");
+     define('REAL_BASE_DIR', self::$basePath);
+     self::selectedProjectActions();
+     self::runAutoloader();
      self::$serviceProviders=array_merge(Config::get("app")->providers,(new PackageManifest)->providers());     
      do_action("system_init");
     }
@@ -142,14 +133,7 @@ class OceanWT extends Container
     public function run(string $routeMode=null)
     {
      self::init();
-     if(!Config::get("view")->default || Config::get("view")->default=="view"){
-      self::templateEngine([(new TemplateEngine()),'render']);
-     }elseif(Config::get("view")->engines[Config::get("view")->default]){
-      self::templateEngine(Config::get("view")->engines[Config::get("view")->default]);
-     }
-     if(isset(GET_CONFIGS['composer_autoload']) && GET_CONFIGS['composer_autoload']==true && file_exists(GET_DIRS['VENDOR'].'autoload.php')){
-      include(GET_DIRS['VENDOR'].'autoload.php');
-     }
+     self::templateEngine(Config::get("app")->defaultTemplateEngine);
      if(Config::get("app")->mode=="development"){
       if(is_cli()){
        set_error_handler("\OceanWT\Console::errorHandler");
@@ -195,7 +179,7 @@ class OceanWT extends Container
        "CONFIGS" => REAL_BASE_DIR."etc/",
        "VENDOR" => REAL_BASE_DIR."vendor/",
        "LOGS" => $paths["VAR"]."logs/",
-       "VIEWS" => isset($GLOBALS['_OCEANWEBTURK']['CURRENT_VIEW_PATH']) ? $GLOBALS['_OCEANWEBTURK']['CURRENT_VIEW_PATH'] : $paths["VAR"]."html/",
+       "VIEWS" => $paths["VAR"]."html/",
        "LANGS" => $paths["VAR"]."langs/",
        "CACHES" => $paths["VAR"]."cache/",
        "MODELS" => $paths["APP"]."Models/",
@@ -291,7 +275,7 @@ class OceanWT extends Container
      }
      $urls=[
      'skeleton'=>['type'=>'git','url'=>'https://github.com/oceanwebturk/oceanwebturk','path'=>REAL_BASE_DIR],
-     'system'=>['type'=>'git','url'=>'https://github.com/oceanwebturk/framework','path'=>GET_DIRS['SYSTEM']]
+     'system'=>['type'=>'git','url'=>'https://github.com/oceanwebturk/framework','path'=>self::getPaths()['SYSTEM']]
      ]+(Array) $hooks;
     }
 
@@ -324,7 +308,7 @@ class OceanWT extends Container
      ob_start();
      echo self::getApplication() ? call_user_func([self::getApplication(),'execute']) : '';
      Http\Route::mode($routeMode)->run();
-     echo \minify(ob_get_clean(),(isset(self::getApplication()->minify) ? self::getApplication()->minify : Config::setDriver("config")->default(__NAMESPACE__."\\DefaultApp")->get("app")->minify));
+     echo \minify(ob_get_clean(),(isset(self::getApplication()->minify) ? self::getApplication()->minify : (isset($GLOBALS['_OCEANWEBTURK']['MINIFY']) ? $GLOBALS['_OCEANWEBTURK']['MINIFY'] : Config::setDriver("config")->get("app")->minify)));
     }
 
     /**
@@ -334,5 +318,50 @@ class OceanWT extends Container
     {
      set_error_handler("\OceanWT\OceanWT::webErrorHandler");
      set_exception_handler("\OceanWT\OceanWT::webExceptionHandler");
+    }
+    
+    /**
+     * @return void
+     */
+    private static function runAutoloader(): void 
+    {
+     define('GET_DIRS', self::getPaths());
+     define('GET_NAMESPACES', self::getNamespaces());
+     define('GET_CONFIGS', self::getConfigs());
+     foreach(self::getNamespaces()as$nKey => $nVal) {
+      self::$app->autoloader->addNamespace($nKey, $nVal);
+      if(isset(self::getPaths()[$nKey])) {
+       self::$app->autoloader->addNamespace(self::getNamespaces()[$nKey],self::getPaths()[$nKey]);
+      }
+     }
+     self::$app->autoloader->register();
+     if(isset(self::getConfigs()['composer_autoload']) && self::getConfigs()['composer_autoload']==true && file_exists(self::getPaths()['VENDOR'].'autoload.php')){
+      include(self::getPaths()['VENDOR'].'autoload.php');
+     }
+    }
+    
+    private static function selectedProjectActions()
+    {
+     $projectCallbacks=[
+      'global' => self::$projectType.'_PROJECT',
+      'dirs' => self::$projectType.'_PROJECT_DIRS', 
+      'namespaces' => self::$projectType.'_PROJECT_NAMESPACES', 
+     ];
+     if(!in_array(self::$projectType,self::$supportedProjectTypes)){
+      http_response_code(500);
+      exit();
+     }
+     return array_map(function($callback){
+      echo call_user_func([new self(),$callback]); 
+     },$projectCallbacks);
+    }
+    
+    /**
+     * @return void
+     */
+    private function EP_PROJECT(): void
+    {
+     self::$defines=array_merge(self::$defines,['PROJECTS'=>REAL_BASE_DIR.'projects/']);
+     self::$namespaces=array_merge(self::$namespaces,['PROJECTS'=>'Projects\\']);
     }
 }
