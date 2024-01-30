@@ -157,7 +157,7 @@ class OceanWT extends Container
     /**
      * @param string $methodName
      */
-    protected static function providerLists(string $methodName = "boot")
+    public static function providerLists(string $methodName = "boot")
     {
      for($i = 0;$i < count(self::$serviceProviders);$i++) {
       $class = self::$serviceProviders[$i];
@@ -303,7 +303,7 @@ class OceanWT extends Container
      * @param string|null $routeMode
      * @return void
      */
-    private function web(string $routeMode=null)
+    public function web(string $routeMode=null)
     {
      ob_start();
      echo self::getApplication() ? call_user_func([self::getApplication(),'execute']) : '';
@@ -314,7 +314,7 @@ class OceanWT extends Container
     /**
      * @return void
      */
-    private function webHandler(): void
+    public function webHandler(): void
     {
      set_error_handler("\OceanWT\OceanWT::webErrorHandler");
      set_exception_handler("\OceanWT\OceanWT::webExceptionHandler");
@@ -323,7 +323,7 @@ class OceanWT extends Container
     /**
      * @return void
      */
-    private static function runAutoloader(): void 
+    public static function runAutoloader(): void 
     {
      define('GET_DIRS', self::getPaths());
      define('GET_NAMESPACES', self::getNamespaces());
@@ -340,7 +340,7 @@ class OceanWT extends Container
      }
     }
     
-    private static function selectedProjectActions()
+    public static function selectedProjectActions()
     {
      $projectCallbacks=[
       'global' => self::$projectType.'_PROJECT',
@@ -359,7 +359,7 @@ class OceanWT extends Container
     /**
      * @return void
      */
-    private function EP_PROJECT(): void
+    public function EP_PROJECT(): void
     {
      self::$defines=array_merge(self::$defines,['PROJECTS'=>REAL_BASE_DIR.'projects/']);
      self::$namespaces=array_merge(self::$namespaces,['PROJECTS'=>'Projects\\']);

@@ -19,7 +19,7 @@ class HelpCommand extends Command
    $list.=' '.$command.'  '.(isset($props['options']['description']) ? $props['options']['description'] : $props['description']).'
  ';
   }
-  echo $list;
+  $this->write($list);
  }
 
  /**

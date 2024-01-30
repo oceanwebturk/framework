@@ -78,7 +78,7 @@ class Console
  private static function showHeader()
  {
   Command::write(sprintf(
-   '  OceanWebTurk v%s
+   ' OceanWebTurk v%s
   ',
    OCEANWT_VERSION
   ));

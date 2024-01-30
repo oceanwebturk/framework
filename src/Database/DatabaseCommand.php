@@ -12,7 +12,7 @@ class DatabaseCommand extends Command
   */
  public function create(array $params=[])
  {
-  $sql='CREATE DATABASE '.$params[2];
+  $sql='CREATE DATABASE '.$params[1];
   DB::query($sql)->run();
  }
  /**
@@ -20,7 +20,7 @@ class DatabaseCommand extends Command
   */
  public function drop(array $params=[])
  {
-  $sql='DROP DATABASE '.$params[2];
+  $sql='DROP DATABASE '.$params[1];
   DB::query($sql)->run();
  }
 
@@ -75,7 +75,7 @@ class DatabaseCommand extends Command
   */
  public function migration(array $params=[])
  {
-  $migration_name=$params[2];
+  $migration_name=$params[1];
   $migration_sample=file_get_contents(__DIR__.'/samples/migration.sample');
   $migration_file=GET_DIRS['MIGRATIONS'].date("dmY_His")."_".$migration_name."_table.php";
   $content=str_replace("{TABLE_NAME}",$migration_name,$migration_sample);

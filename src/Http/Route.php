@@ -186,7 +186,6 @@ class Route
    public function run()
    {
     $url = str_replace(array_keys(self::$configs->uriReplaceCharacters),array_values(self::$configs->uriReplaceCharacters),urldecode(Request::security(Request::getUrl(),true)));
-    echo str_replace(array_keys(self::$configs->uriReplaceCharacters),array_values(self::$configs->uriReplaceCharacters),urldecode(Request::security("http://localhost:8008/devtools/assets?file=../routes.php",true)))."<br>";
     foreach(self::$routes as$path => $props) {
      foreach(self::$patterns as$key=>$value){
       $path=preg_replace('#^'.$key.'$#',$value,$path);
