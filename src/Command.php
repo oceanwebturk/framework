@@ -22,7 +22,6 @@ class Command
   public static function write(string $text,string $color="red")
   {
    $left = "\x1b[".self::$fgColors[$color];
-   $output=isset($_SERVER['COMSPEC']) ? $left.$text."\x1b[0m" : $text;
-   echo " ".$output;
+   echo " ".$text;
   }
 }
