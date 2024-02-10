@@ -1,9 +1,9 @@
 <?php 
 
-namespace OceanWT\Database\Drivers;
+namespace OceanWebTurk\Database\Drivers;
 
 use PDO;
-use OceanWT\Support\Traits\Macro;
+use OceanWebTurk\Support\Traits\Macro;
 
 class Mysql extends PDO
 {

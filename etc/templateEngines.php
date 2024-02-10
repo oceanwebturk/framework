@@ -1,41 +1,36 @@
 <?php 
 
 return [
- 'system'=>[\OceanWT\Import::class,'render'],
- // composer require twig/twig
- 'twig'=>function(string $name,array $data=[]){
-  if(is_array($name)){
-   $name=$name['file'];
-   $viewPath=$name['path'];
-  }else{
-  $viewPath=GET_DIRS['VIEWS'];
+ 'system'=>[
+  'package' => 'oceanwebturk/framework',
+  'exec' => 'composer require {{package}}',
+  'action' => [\OceanWebTurk\Import::class,'render']
+ ],
+ 'twig'=>[
+  'package' => 'twig/twig',
+  'exec' => 'composer require {{package}}',
+  'action' => function(array $args,array $data=[]){
+   $loader=new \Twig\Loader\FilesystemLoader($args['viewPath']);
+   $twig=new \Twig\Environment($loader,[
+     'cache'=> $args['cachePath'],
+   ]);
+   echo $twig->render($args['name'],$data);
   }
-  $loader=new \Twig\Loader\FilesystemLoader($viewPath);
-  $twig=new \Twig\Environment($loader,[
-    'cache'=> isset($cachePath) ? $cachePath : GET_DIRS['CACHES'],
-  ]);
-  echo $twig->render($name,$data);
- },
- // composer require jenssegers/blade
- 'blade'=>function(string $name,array $data=[]){
-  if(is_array($name)){
-   $name=$name['file'];
-   $viewPath=$name['path'];
-  }else{
-   $viewPath=GET_DIRS['VIEWS'];
+ ],
+ 'blade'=>[
+  'package' => 'jenssegers/blade',
+  'exec' => 'composer require {{package}}',
+  'action' => function(array $args,array $data=[]){
+    $blade=new Jenssegers\Blade\Blade($args['viewPath'],$args['cachePath']);
+    echo $blade->render($name,$data);
   }
-  $blade=new Jenssegers\Blade\Blade($viewPath,(isset($cachePath) ? $cachePath : GET_DIRS['CACHES']));
-  echo $blade->render($name,$data);
- },
- //composer require league/plates
- 'plates' => function(string $name,array $data=[]){
-  if(is_array($name)){
-   $file=$name['file'];
-   $path=$name['path'];
-  }else{
-   $path=GET_DIRS['VIEWS'];
+ ],
+ 'plates' => [
+  'package' => 'league/plates',
+  'exec' => 'composer require {{package}}',
+  'action' => function(array $name,array $data=[]){
+   $template=new \League\Plates\Engine($args['viewPath']);
+   echo $template->render($args['name'],$data);
   }
-  $template=new \League\Plates\Engine($path);
-  echo $template->render($file,$data);
- }
+ ],
 ];

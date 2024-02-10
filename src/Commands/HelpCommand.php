@@ -1,9 +1,9 @@
 <?php
 
-namespace OceanWT\Commands;
-use OceanWT\Console;
-use OceanWT\Command;
-use OceanWT\OceanWT;
+namespace OceanWebTurk\Commands;
+use OceanWebTurk\Console;
+use OceanWebTurk\Command;
+use OceanWebTurk\OceanWebTurk;
 class HelpCommand extends Command
 {
 
@@ -30,7 +30,7 @@ class HelpCommand extends Command
   $file=file_exists(REAL_BASE_DIR."server.php") ? REAL_BASE_DIR."server.php" : GET_DIRS['SYSTEM'].'Support/CLIServe.php';
   $php = escapeshellarg(PHP_BINARY);
   $host = "localhost";
-  $port = intval(isset(OceanWT::$configs['APP_PORT']) ? OceanWT::$configs['APP_PORT'] : 8008);
+  $port = intval(isset(OceanWebTurk::$configs['APP_PORT']) ? OceanWebTurk::$configs['APP_PORT'] : 8008);
   $rewrite = escapeshellarg(__DIR__.'/Support/CLIServe.php');
   $command = $php." -S ".$host.":".$port." -t ".GET_DIRS["DIRECTORY_ROOT"];
   passthru($command, $rewrite);

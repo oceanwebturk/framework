@@ -1,9 +1,9 @@
 <?php 
 
-namespace OceanWT\Support\Security;
+namespace OceanWebTurk\Support\Security;
 
-use OceanWT\Config;
-use OceanWT\Http\Request;
+use OceanWebTurk\Config;
+use OceanWebTurk\Http\Request;
 
 class CSRF
 {

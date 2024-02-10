@@ -1,6 +1,6 @@
 <?php
 
-namespace OceanWT;
+namespace OceanWebTurk;
 
 class Console
 {
@@ -80,7 +80,7 @@ class Console
   Command::write(sprintf(
    ' OceanWebTurk v%s
   ',
-   OCEANWT_VERSION
+   OceanWebTurk_VERSION
   ));
  }
 

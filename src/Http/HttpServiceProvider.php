@@ -1,8 +1,8 @@
 <?php
 
-namespace OceanWT\Http;
+namespace OceanWebTurk\Http;
 
-use OceanWT\Support\ServiceProvider;
+use OceanWebTurk\Support\ServiceProvider;
 
 class HttpServiceProvider extends ServiceProvider
 {

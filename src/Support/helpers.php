@@ -1,6 +1,6 @@
 <?php 
 
-use OceanWT\Support\Security\CSRF;
+use OceanWebTurk\Support\Security\CSRF;
 
 if(!function_exists("csrf_meta")){
  function csrf_meta(){

@@ -1,6 +1,6 @@
 <?php
 
-namespace OceanWT\Http;
+namespace OceanWebTurk\Http;
 
 class DefaultRoute{
  public $autoRoute=false;

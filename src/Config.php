@@ -1,6 +1,6 @@
 <?php
 
-namespace OceanWT;
+namespace OceanWebTurk;
 
 class Config
 {

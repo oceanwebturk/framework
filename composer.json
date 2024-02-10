@@ -19,7 +19,7 @@
   },
   "autoload":{
     "psr-4":{
-      "OceanWT\\":"./src/"
+      "OceanWebTurk\\":"./src/"
     },
     "files":["./bootstrap.php","./src/Support/helpers.php","./src/Http/helpers.php"]
    },

@@ -12,5 +12,6 @@
  "controller_not_found":"Controller [%s] Not Found",
  "method_not_found":"Method [%s] Not Found",
  "driver_not_found":"Driver [%s] Not Found",
- "php_version_control":"Your PHP Version needs to be %s and above"
+ "php_version_control":"Your PHP Version needs to be %s and above",
+ "not_found": "%s Not Found"
 }

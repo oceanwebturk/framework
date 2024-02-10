@@ -1,8 +1,8 @@
 <?php
 
-namespace OceanWT\Commands;
+namespace OceanWebTurk\Commands;
 
-use OceanWT\Command;
+use OceanWebTurk\Command;
 
 class MakeCommand extends Command
 {

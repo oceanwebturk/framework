@@ -1,6 +1,6 @@
 <?php
 
-namespace OceanWT\Support;
+namespace OceanWebTurk\Support;
 
 class Lang
 {

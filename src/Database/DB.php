@@ -1,8 +1,8 @@
 <?php 
-namespace OceanWT\Database;
+namespace OceanWebTurk\Database;
 
-use OceanWT\Config;
-use OceanWT\Support\Traits\Macro;
+use OceanWebTurk\Config;
+use OceanWebTurk\Support\Traits\Macro;
 
 class DB 
 {

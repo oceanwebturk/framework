@@ -1,5 +1,5 @@
 <?php
-namespace OceanWT\Config;
+namespace OceanWebTurk\Config;
 class Config
 {
  public function getFile($file)

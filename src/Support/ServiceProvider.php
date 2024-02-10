@@ -1,25 +1,25 @@
 <?php
 
-namespace OceanWT\Support;
+namespace OceanWebTurk\Support;
 
-use OceanWT\Import;
-use OceanWT\Lang;
+use OceanWebTurk\Import;
+use OceanWebTurk\Lang;
 
 class ServiceProvider
 {
     use Traits\Macro;
     /**
-     * @var \OceanWT\OceanWT
+     * @var \OceanWebTurk\OceanWebTurk
      */
     public $app;
     
     /**
-     * @var \OceanWT\Http\Route
+     * @var \OceanWebTurk\Http\Route
      */
     public $route;
 
     /**
-     * @var \OceanWT\Console
+     * @var \OceanWebTurk\Console
      */
     public $cli;
 
@@ -30,17 +30,17 @@ class ServiceProvider
     
     public function __construct()
     {
-     $this->app=new \OceanWT\OceanWT();
-     $this->cli=new \OceanWT\Console();
-     $this->route=new \OceanWT\Http\Route();
+     $this->app=new \OceanWebTurk\OceanWebTurk();
+     $this->cli=new \OceanWebTurk\Console();
+     $this->route=new \OceanWebTurk\Http\Route();
     }
 
     public static function default()
     { 
         self::$providers = [
-         \OceanWT\ApplicationServiceProvider::class,
-         \OceanWT\Http\HttpServiceProvider::class,
-         \OceanWT\Database\DatabaseServiceProvider::class,
+         \OceanWebTurk\ApplicationServiceProvider::class,
+         \OceanWebTurk\Http\HttpServiceProvider::class,
+         \OceanWebTurk\Database\DatabaseServiceProvider::class,
         ];
         return new self();
     }

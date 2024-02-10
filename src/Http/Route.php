@@ -1,9 +1,9 @@
 <?php
 
-namespace OceanWT\Http;
+namespace OceanWebTurk\Http;
 
-use OceanWT\Config;
-use OceanWT\Support\Traits\Macro;
+use OceanWebTurk\Config;
+use OceanWebTurk\Support\Traits\Macro;
 
 class Route
 { 

@@ -1,17 +1,17 @@
 <?php
-namespace OceanWT;
+namespace OceanWebTurk;
 
-use OceanWT\Support\Lang;
+use OceanWebTurk\Support\Lang;
 
-class OceanWT extends Container
+class OceanWebTurk extends Container
 {
     /**
-     * @var \OceanWT\Autoloader
+     * @var \OceanWebTurk\Autoloader
      */
     public $autoloader;
 
     /**
-     * @var \OceanWT\OceanWT
+     * @var \OceanWebTurk\OceanWebTurk
      */
     public static $app;
 
@@ -50,7 +50,7 @@ class OceanWT extends Container
 
     /**
      * @param  array $configs
-     * @return \OceanWT\OceanWT
+     * @return \OceanWebTurk\OceanWebTurk
      */
     public static function configs(array $configs)
     {
@@ -60,7 +60,7 @@ class OceanWT extends Container
 
     /**
      * @param  array  $defines
-     * @return \OceanWT\OceanWT
+     * @return \OceanWebTurk\OceanWebTurk
      */
     public static function defines(array $defines)
     {
@@ -70,7 +70,7 @@ class OceanWT extends Container
 
     /**
      * @param  array  $namespaces
-     * @return \OceanWT\OceanWT
+     * @return \OceanWebTurk\OceanWebTurk
      */
     public static function namespaces(array $namespaces)
     {
@@ -136,8 +136,8 @@ class OceanWT extends Container
      self::templateEngine(Config::get("app")->defaultTemplateEngine);
      if(Config::get("app")->mode=="development"){
       if(is_cli()){
-       set_error_handler("\OceanWT\Console::errorHandler");
-       set_exception_handler("\OceanWT\Console::exceptionHandler");
+       set_error_handler("\OceanWebTurk\Console::errorHandler");
+       set_exception_handler("\OceanWebTurk\Console::exceptionHandler");
       }else{
        $this->webHandler();
       }
@@ -316,8 +316,8 @@ class OceanWT extends Container
      */
     public function webHandler(): void
     {
-     set_error_handler("\OceanWT\OceanWT::webErrorHandler");
-     set_exception_handler("\OceanWT\OceanWT::webExceptionHandler");
+     set_error_handler("\OceanWebTurk\OceanWebTurk::webErrorHandler");
+     set_exception_handler("\OceanWebTurk\OceanWebTurk::webExceptionHandler");
     }
     
     /**

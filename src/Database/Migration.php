@@ -1,8 +1,8 @@
 <?php
-namespace OceanWT\Database;
+namespace OceanWebTurk\Database;
 
-use OceanWT\Http\Request;
-use OceanWT\Support\Traits\Macro;
+use OceanWebTurk\Http\Request;
+use OceanWebTurk\Support\Traits\Macro;
 
 class Migration
 {

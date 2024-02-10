@@ -1,6 +1,6 @@
 <?php 
 
-namespace OceanWT\Support\Traits;
+namespace OceanWebTurk\Support\Traits;
 
 trait Macro
 {

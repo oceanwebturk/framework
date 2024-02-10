@@ -1,8 +1,8 @@
 <?php
 
-namespace OceanWT\Http;
+namespace OceanWebTurk\Http;
 
-use OceanWT\Command;
+use OceanWebTurk\Command;
 
 class HttpCommand extends Command
 {

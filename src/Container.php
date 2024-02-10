@@ -1,7 +1,7 @@
 <?php 
-namespace OceanWT;
+namespace OceanWebTurk;
 
-use OceanWT\Support\Traits\Macro;
+use OceanWebTurk\Support\Traits\Macro;
 
 class Container
 {

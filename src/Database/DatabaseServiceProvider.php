@@ -1,8 +1,8 @@
 <?php
 
-namespace OceanWT\Database;
+namespace OceanWebTurk\Database;
 
-use OceanWT\Support\ServiceProvider;
+use OceanWebTurk\Support\ServiceProvider;
 
 class DatabaseServiceProvider extends ServiceProvider
 {

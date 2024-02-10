@@ -1,8 +1,8 @@
 <?php
 
-namespace OceanWT\Database;
+namespace OceanWebTurk\Database;
 
-use OceanWT\Http\Request;
+use OceanWebTurk\Http\Request;
 
 trait TableCreator
 {

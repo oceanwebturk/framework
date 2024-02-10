@@ -1,9 +1,9 @@
 <?php
 
-namespace OceanWT\Database;
+namespace OceanWebTurk\Database;
 
-use OceanWT\Command;
-use OceanWT\Support\Filesystem;
+use OceanWebTurk\Command;
+use OceanWebTurk\Support\Filesystem;
 
 class DatabaseCommand extends Command
 {

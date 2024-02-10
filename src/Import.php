@@ -1,6 +1,6 @@
 <?php
 
-namespace OceanWT;
+namespace OceanWebTurk;
 
 class Import
 {
@@ -31,9 +31,15 @@ class Import
   return self::$engines;
  }
 
+ /**
+  * @param  string $name
+  * @param  object $action
+  */
  public static function  createEngine(string $name,array|object $action): Import
  {
-  self::$engines[$name]=$action;
+  self::$engines[$name]=[
+   'action' => $action
+  ];
   return new self;
  }
 
@@ -59,32 +65,46 @@ class Import
   */
  public static function view(string $name,array $data = [])
  {
-   $engine=OceanWT::$configs['templateEngine'];
    if(strpos($name,"::")){
     $ex=explode("::",$name);
     if($configs=self::$paths[$ex[0]]){
      $engine=self::$engines[$configs['templateEngine']];
-     $name=['path'=>$configs['path'],'file'=>$ex[1]];
     }
+   }else{
+    $engine=self::$engines[OceanWebTurk::$configs['templateEngine']];
    }
+   $packages=(new PackageManifest())->getManifest();
+   if(isset($engine['package']) && !in_array($engine['package'],$packages)){
+    throw new \Exception(sprintf(lang("system::not_found"),$engine['package']), 1);
+   }
+   $args=[
+    'cachePath' => isset($configs['cachePath']) ? $configs['cachePath'] : GET_DIRS['CACHES'],
+    'viewPath' => isset($configs['path']) ? $configs['path'] : GET_DIRS['VIEWS'],
+    'name' => isset($ex[1]) ? $ex[1] : $name,
+   ];
    $data=array_merge($data,self::$shareds);
-   if(is_array($engine)){
-    echo @call_user_func_array([$engine[0],$engine[1]],[$name,$data]);
-   }elseif(is_string($engine)){
-    echo call_user_func_array(self::$engines[$engine],[$name,$data]);
-   }elseif(is_callable($engine)){
-    echo call_user_func_array($engine,[$name,$data]);
-   }
+   return self::callTypeTemplateEngine($engine,$args,$data);
  }
 
- public static function render($name, $data = [])
+ public static function callTypeTemplateEngine($engine,$args,$data)
+ {
+  $engine=$engine['action'];
+  if(is_array($engine)){
+   echo @call_user_func_array([$engine[0],$engine[1]],[$args,$data]);
+  }elseif(is_string($engine)){
+   echo call_user_func_array(self::$engines[$engine]['action'],[$args,$data]);
+  }elseif(is_callable($engine)){
+   echo call_user_func_array($engine,[$args,$data]);
+  }
+ }
+
+ /**
+  * @param  array  $args
+  * @param  array  $data
+  */
+ public static function render(array $args=[],array $data = [])
  {
   extract($data);
-  if(is_array($name)) {
-   $file=$name['path'].$name['file'];
-  }else{
-   $file=GET_DIRS["VIEWS"].$name;
-  }
-  include($file.".php");
+  include($args['viewPath'].$args['name'].".php");
  }
 }

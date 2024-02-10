@@ -1,5 +1,5 @@
 <?php 
 
 return [
- 'csrf' => OceanWT\Support\Security\CSRF::class
+ 'csrf' => OceanWebTurk\Support\Security\CSRF::class
 ];

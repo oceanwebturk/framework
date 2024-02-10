@@ -1,9 +1,9 @@
 <?php
 
-namespace OceanWT\Http;
+namespace OceanWebTurk\Http;
 
-use OceanWT\Import;
-use OceanWT\Support\Traits\Macro;
+use OceanWebTurk\Import;
+use OceanWebTurk\Support\Traits\Macro;
 
 class Controller
 {

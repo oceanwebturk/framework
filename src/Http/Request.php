@@ -1,8 +1,8 @@
 <?php
 
-namespace OceanWT\Http;
+namespace OceanWebTurk\Http;
 
-use OceanWT\Support\Traits\Macro;
+use OceanWebTurk\Support\Traits\Macro;
 
 class Request
 {   

@@ -1,7 +1,7 @@
 <?php
 
-use OceanWT\Http\URL;
-use OceanWT\Http\Route;
+use OceanWebTurk\Http\URL;
+use OceanWebTurk\Http\Route;
 
 if(!function_exists("base_url")){
  function base_url($url = null){
@@ -20,6 +20,6 @@ if(!function_exists("public_url")){
 }
 if(!function_exists("route")){
  function route($name,$params=[]){
-  return \OceanWT\Http\Route::url($name,$params);
+  return \OceanWebTurk\Http\Route::url($name,$params);
  }
 }

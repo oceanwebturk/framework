@@ -1,5 +1,5 @@
 <?php
-define("OCEANWT_VERSION", "1.0");
+define("OceanWebTurk_VERSION", "1.0");
 define("REQUIRED_PHP_VERSION","7.4");
 $GLOBALS['_OCEANWEBTURK'] = [];
 if(!function_exists("request_uri")){
@@ -43,23 +43,23 @@ if(!function_exists("is_cli")){
 
 if(!function_exists("dd")){
  function dd($text){
-  return OceanWT\Output::write($text);
+  return OceanWebTurk\Output::write($text);
  }
 }
 
-use OceanWT\Hook;
-use OceanWT\Http\Route;
-use OceanWT\Support\Lang;
+use OceanWebTurk\Hook;
+use OceanWebTurk\Http\Route;
+use OceanWebTurk\Support\Lang;
 
 if(!function_exists("app")){
  function app(string|object $abstract=null,array $params=[]){
-  return \OceanWT\OceanWT::getInstance()->make($abstract,$params);
+  return \OceanWebTurk\OceanWebTurk::getInstance()->make($abstract,$params);
  }
 }
 
 if(!function_exists("view")){
  function view(string $name,array $data = array()){
-   \OceanWT\Import::view($name, $data);
+   \OceanWebTurk\Import::view($name, $data);
  }
 }
 
@@ -71,7 +71,7 @@ if(!function_exists("route")){
 
 if(!function_exists("config")){
  function config(string $config){
-  return \OceanWT\Config::get($config);
+  return \OceanWebTurk\Config::get($config);
  }
 }
 
@@ -99,9 +99,9 @@ if(!function_exists("lang")){
  }
 }
 
-OceanWT\Console::$commands=[
- 'help'=>['action'=>OceanWT\Commands\HelpCommand::class,'description'=>'Help'],
- 'make:provider'=>['action'=>[OceanWT\Commands\MakeCommand::class,'provider'],'description'=>'Make a Provider File'],
- 'serve'=>['action'=>[OceanWT\Commands\HelpCommand::class,'serve'],'description'=>'Application development server'],
- 'upgrade'=>['action'=>[OceanWT\OceanWT::class,'upgrade'],'description'=>'System Upgrade'],
+OceanWebTurk\Console::$commands=[
+ 'help'=>['action'=>OceanWebTurk\Commands\HelpCommand::class,'description'=>'Help'],
+ 'make:provider'=>['action'=>[OceanWebTurk\Commands\MakeCommand::class,'provider'],'description'=>'Make a Provider File'],
+ 'serve'=>['action'=>[OceanWebTurk\Commands\HelpCommand::class,'serve'],'description'=>'Application development server'],
+ 'upgrade'=>['action'=>[OceanWebTurk\OceanWebTurk::class,'upgrade'],'description'=>'System Upgrade'],
 ];
