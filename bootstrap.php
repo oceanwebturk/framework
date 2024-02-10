@@ -1,5 +1,4 @@
 <?php
-
 define("OCEANWT_VERSION", "1.0");
 define("REQUIRED_PHP_VERSION","7.4");
 $GLOBALS['_OCEANWEBTURK'] = [];
