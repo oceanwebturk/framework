@@ -23,7 +23,7 @@ class OceanWebTurk extends Container
     /**
      * @var string
      */
-    public static $projectType="FS";
+    public static $projectType="HOSTING";
 
     /**
      * @var array
@@ -33,7 +33,7 @@ class OceanWebTurk extends Container
     /**
      * @var array
      */
-    public static $serviceProviders = [],$supportedProjectTypes = ["FS","EP"];
+    public static $serviceProviders = [],$supportedProjectTypes = ["FS","EP","HOSTING"];
     
     /**
      * @param string|null $rootDir
@@ -120,7 +120,9 @@ class OceanWebTurk extends Container
     public static function init()
     {
      ini_set("default_charset","UTF-8");
-     define('REAL_BASE_DIR', self::$basePath);
+     if(!defined('REAL_BASE_DIR')){
+      define('REAL_BASE_DIR', self::$basePath);
+     }
      self::selectedProjectActions();
      self::runAutoloader();
      self::$serviceProviders=array_merge(Config::get("app")->providers,(new PackageManifest)->providers());     
@@ -174,8 +176,7 @@ class OceanWebTurk extends Container
     public static function getPaths()
     {
      $paths=['APP'=>REAL_BASE_DIR.'app/','VAR'=>REAL_BASE_DIR.'var/','DATABASE'=>REAL_BASE_DIR.'database/'];
-     return self::$defines+$paths+[
-       "DIRECTORY_ROOT" => "public/",
+     return ["DIRECTORY_ROOT" => "public/"]+self::$defines+$paths+[
        "CONFIGS" => REAL_BASE_DIR."etc/",
        "VENDOR" => REAL_BASE_DIR."vendor/",
        "LOGS" => $paths["VAR"]."logs/",
@@ -363,5 +364,11 @@ class OceanWebTurk extends Container
     {
      self::$defines=array_merge(self::$defines,['PROJECTS'=>REAL_BASE_DIR.'projects/']);
      self::$namespaces=array_merge(self::$namespaces,['PROJECTS'=>'Projects\\']);
+    }
+
+    public function HOSTING_PROJECT(): void
+    {
+     $sitesPath=is_dir(REAL_BASE_DIR.'sites/') ? REAL_BASE_DIR.'sites/' : self::getPaths()['VAR'].'sites/';
+     self::$defines=array_merge(self::$defines,['SITES'=>$sitesPath]);
     }
 }

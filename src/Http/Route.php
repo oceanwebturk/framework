@@ -7,7 +7,7 @@ use OceanWebTurk\Support\Traits\Macro;
 
 class Route
 { 
-    use Macro;
+    use Macro,ManagerDomain;
 
     /**
      * @var array
@@ -22,7 +22,7 @@ class Route
     /**
      * @var string|object
      */
-    public static $prefix,$controller;
+    public static $prefix,$controller,$domain;
     
     /**
      * @var string|array
@@ -69,7 +69,7 @@ class Route
      */
     public static function domain(string $domain): Route
     {
-     self::$routes[array_key_last(self::$routes)]['domain']=$domain;
+     self::$domain=$domain;
      return new self();
     }
 
@@ -121,10 +121,11 @@ class Route
      $controller=self::$controller;
      self::$method=$method;
      $options=array_merge(self::$groupOptions,$options);
-     self::$routes[((isset($options['prefix']) ? $options['prefix'] : (isset(self::$prefix) ? self::$prefix : '')).$uri)] = [
+     self::$routes[isset($options['domain']) ? $options['domain'] : self::$domain][((isset($options['prefix']) ? $options['prefix'] : (isset(self::$prefix) ? self::$prefix : '')).$uri)] = [
       'action' => (in_array(gettype($controller),["object","string"],true) ? $controller."::".$action : $action),
       'options' => $options,
-      'methods' => $method
+      'methods' => $method,
+      'domain' => isset($options['domain']) ? $options['domain'] : self::$domain,
      ];
      return new self;
     }
@@ -186,33 +187,11 @@ class Route
    public function run()
    {
     $url = str_replace(array_keys(self::$configs->uriReplaceCharacters),array_values(self::$configs->uriReplaceCharacters),urldecode(Request::security(Request::getUrl(),true)));
-    foreach(self::$routes as$path => $props) {
-     foreach(self::$patterns as$key=>$value){
-      $path=preg_replace('#^'.$key.'$#',$value,$path);
-     }
-     $pattern = '#^'.$path.'$#';
-     $method=is_string($props['methods']) ? [$props['methods']] : $props['methods'];
-     if(preg_match($pattern,$url,$params) && in_array($_SERVER['REQUEST_METHOD'],$method)) {
-      http_response_code(200);
-      array_shift($params);
-      $action = $props['action'];
-      if(isset($props['options']['minify'])){
-       $GLOBALS['_OCEANWEBTURK']['MINIFY'] = $props['options']['minify'];
-      }
-      if(isset($props['options']['filters'])){
-       $filters=$props['options']['filters'];
-       array_map(function($filter){
-        if(class_exists(self::$filters[$filter])){
-         $class=self::$filters[$filter];
-         $class=new $class();
-         $this->filter_get($class);
-        }
-       },$filters);
-      }
-      $this->setActionTypeController($action,$params,$props);
-     }else{
-      http_response_code(404);
-     }
+    $domain=isset(self::$routes[URL::host()]) ? URL::host() : '';
+    if(isset(self::$sites[URL::host()])){
+     $this->customSite(URL::host());
+    }elseif(isset(self::$routes[$domain])){
+     $this->routeExec($url,$domain);
     }
    }
 
@@ -274,6 +253,50 @@ class Route
    {
     if(method_exists($class,'handle')){
      return $class->handle();
+    }
+   }
+
+   /**
+    * @param  string $url
+    * @param  string $domain
+    */
+   private function routeExec(string $url,string $domain)
+   {
+    foreach(self::$routes[$domain]as$path => $props) {
+     foreach(self::$patterns as$key=>$value){
+      $path=preg_replace('#^'.$key.'$#',$value,$path);
+     }
+     $pattern = '#^'.$path.'$#';
+     $method=is_string($props['methods']) ? [$props['methods']] : $props['methods'];
+     if(preg_match($pattern,$url,$params) && in_array($_SERVER['REQUEST_METHOD'],$method)) {
+      http_response_code(200);
+      array_shift($params);
+      $action = $props['action'];
+      if(isset($props['options']['minify'])){
+       $GLOBALS['_OCEANWEBTURK']['MINIFY'] = $props['options']['minify'];
+      }
+      $this->filterRun($props);
+      $this->setActionTypeController($action,$params,$props);
+     }else{
+      http_response_code(404);
+     }
+    }
+   }
+
+   /**
+    * @param  array  $props
+    */
+   private function filterRun(array $props = [])
+   {
+     if(isset($props['options']['filters'])){
+      $filters=$props['options']['filters'];
+      array_map(function($filter){
+       if(class_exists(self::$filters[$filter])){
+        $class=self::$filters[$filter];
+        $class=new $class();
+        $this->filter_get($class);
+       }
+     },$filters);
     }
    }
 }
