@@ -23,7 +23,7 @@ class OceanWebTurk extends Container
     /**
      * @var string
      */
-    public static $projectType="HOSTING";
+    public static $projectType="FS";
 
     /**
      * @var array
