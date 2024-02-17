@@ -1,10 +1,9 @@
 #!/usr/bin/env php
 <?php
 $vendorAutoload=[
- __DIR__.'/../autload.php',
- __DIR__.'/../vendor/autload.php',
- getcwd().'/vendor/autload.php',
- getcwd().'/../vendor/autload.php',
+ __DIR__.'/../../autoload.php',
+ __DIR__.'/../vendor/autoload.php',
+ getcwd().'/bootstrap.php',
 ];
 foreach($vendorAutoload as$file){
  if(file_exists($file)){
@@ -12,4 +11,4 @@ foreach($vendorAutoload as$file){
  }
 }
 
-print_r(get_included_files());
+(new OceanWebTurk\OceanWebTurk())->run();
