@@ -27,7 +27,12 @@ trait ManagerDomain
  public function customSite(string $domain)
  {
   $siteConfig=self::$sites[$domain];
-  $this->domainPath=GET_DIRS['SITES'].(isset($siteConfig['folder']) ? $siteConfig['folder'] : $domain).'/';
+  if(isset(GET_DIRS['SITES'])){
+  	$this->domainPath=GET_DIRS['SITES'];
+  }else{
+   $this->domainPath=REAL_BASE_DIR."sites/";
+  }
+  $this->domainPath.=(isset($siteConfig['folder']) ? $siteConfig['folder'] : $domain).'/';
   $domainConfig=file_exists($this->domainPath.'composer.json') && isset(json_decode(file_get_contents($this->domainPath.'composer.json'),true)['extra']['oceanwebturk']) ? json_decode(file_get_contents($this->domainPath.'composer.json'),true)['extra']['oceanwebturk'] : json_decode(file_get_contents($this->domainPath.'oceanwebturk.json'),true);
   if(isset($domainConfig['domain']['include_file']) && file_exists($this->domainPath.$domainConfig['domain']['include_file'])){
    include($this->domainPath.$domainConfig['domain']['include_file']);

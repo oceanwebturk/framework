@@ -223,7 +223,7 @@ class OceanWebTurk extends Container
       ob_start();
       $file=$e->getFile();
       $line=$e->getLine();
-      $message=$e->getMessage();
+      $message=$e->getMessage()." (E_EXCEPTION)";
       include(__DIR__.'/Views/layout-handler.php');
       echo minify(ob_get_clean()); 
       exit;
@@ -239,6 +239,7 @@ class OceanWebTurk extends Container
     public static function webErrorHandler(int $no,string $message,string $file,int $line)
     {
       ob_start();
+      $message.=" (E_ERROR)";
       include(__DIR__.'/Views/layout-handler.php');
       echo minify(ob_get_clean());
       exit;
