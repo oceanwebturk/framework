@@ -1,0 +1,15 @@
+#!/usr/bin/env php
+<?php
+$vendorAutoload=[
+ __DIR__.'/../autload.php',
+ __DIR__.'/../vendor/autload.php',
+ getcwd().'/vendor/autload.php',
+ getcwd().'/../vendor/autload.php',
+];
+foreach($vendorAutoload as$file){
+ if(file_exists($file)){
+  include($file);
+ }
+}
+
+print_r(get_included_files());

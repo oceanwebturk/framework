@@ -23,6 +23,7 @@
     },
     "files":["./bootstrap.php","./src/Support/helpers.php","./src/Http/helpers.php"]
    },
+  "bin": ["./console"],
   "minimum-stability":"dev",
   "prefer-stable":true
 }
