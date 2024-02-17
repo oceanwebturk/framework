@@ -267,8 +267,7 @@ class Route
       $path=preg_replace('#^'.$key.'$#',$value,$path);
      }
      $pattern = '#^'.$path.'$#';
-     $method = is_string($props['methods']) ? [$props['methods']] : $props['methods'];
-     if(preg_match($pattern,$url,$params) && in_array($_SERVER['REQUEST_METHOD'],$method)) {
+     if(preg_match($pattern,$url,$params) && in_array($_SERVER['REQUEST_METHOD'],(is_array($props['methods']) ? $props['methods'] : [$props['methods']]))) {
       http_response_code(200);
       array_shift($params);
       $action = $props['action'];
