@@ -123,19 +123,18 @@ class OceanWebTurk extends Container
      if(!defined('REAL_BASE_DIR')){
       define('REAL_BASE_DIR', self::$basePath);
      }
+     self::includeFiles();
      self::selectedProjectActions();
      self::runAutoloader();
      self::$serviceProviders=array_merge(Config::get("app")->providers,(new PackageManifest)->providers());     
-     do_action("system_init");
+     Hook::trigger("system_init");
     }
 
     /**
-     * @param  string|null $routeMode
+     * @return void
      */
-    public function run(string $routeMode=null)
+    public static function controlPHPVersionAndErrorExceptionCustom()
     {
-     self::init();
-     self::templateEngine(Config::get("app")->defaultTemplateEngine);
      if(Config::get("app")->mode=="development"){
       if(is_cli()){
        set_error_handler("\OceanWebTurk\Console::errorHandler");
@@ -147,10 +146,29 @@ class OceanWebTurk extends Container
      if(version_compare(PHP_VERSION,REQUIRED_PHP_VERSION,'<')){
       throw new \Exception(sprintf(lang("system::php_version_control"),REQUIRED_PHP_VERSION), 1);
      }
+    }
+
+    /**
+     * @param  object|null $event
+     * @param  string|null $routeMode
+     */
+    public static function run(object $event=null,string $routeMode=null)
+    {
+     self::init();
+     self::templateEngine(Config::get("app")->defaultTemplateEngine);
+     self::controlPHPVersionAndErrorExceptionCustom();
      self::setLocale(Config::get("app")->lang);
      self::providerLists();
-     if(is_cli()){
-      Console::run($_SERVER['argv']);
+     if(\is_cli()){
+      if($_SERVER['COMPOSER_BINARY']){
+       $method='post_'.$_SERVER['argv'][1].'_cmd';
+       $class=new Composer();
+       if(method_exists($class,$method)){
+        echo call_user_func_array([$class,$method],[$event]);
+       }
+      }else{
+        Console::run($_SERVER['argv']);
+      }
      }else{
       $this->web($routeMode);
      }
@@ -365,6 +383,13 @@ class OceanWebTurk extends Container
     {
      self::$defines=array_merge(self::$defines,['PROJECTS'=>REAL_BASE_DIR.'projects/']);
      self::$namespaces=array_merge(self::$namespaces,['PROJECTS'=>'Projects\\']);
+    }
+
+    public static function includeFiles()
+    {
+     include(__DIR__.'/../bootstrap.php');
+     include(__DIR__.'/Support/helpers.php');
+     include(__DIR__.'/Http/helpers.php');
     }
 
     public function HOSTING_PROJECT(): void

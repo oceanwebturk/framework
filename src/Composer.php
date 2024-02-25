@@ -12,23 +12,23 @@ class Composer
      */
     public static function postAutoloadDump($event)
     {
-        do_action("_composer_post_autoload_dump");
+        Hook::trigger("_composer_post_autoload_dump");
     }
 
     /**
      * @param \Composer\Script\Event $event
      */
-    public static function postInstallCmd($event)
+    public static function post_install_cmd($event)
     {
-        do_action("_composer_post_install_cmd");
+        Hook::trigger("_composer_post_install_cmd");
     }
 
     /**
      * @param \Composer\Script\Event $event
      */
-    public static function postUpdateCmd($event)
+    public static function post_update_cmd($event)
     {
-        do_action("_composer_post_update_cmd");
+        Hook::trigger("_composer_post_update_cmd");
     }
     
     /**

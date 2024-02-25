@@ -42,7 +42,13 @@ trait Macro
   */
  public static function __callStatic(string $method,array $params)
  {
-  return self::useClass($method,$params);
+  if(self::hasMacro($method)){
+    return self::useClass($method,$params);
+  }else{
+   if(method_exists(self,$method)){
+    return call_user_func_array([self::class, $method], $params);
+   }
+  }
  }
  
  /**
@@ -52,7 +58,13 @@ trait Macro
   */
  public function __call(string $method,array $params)
  {
-  return self::useClass($method,$params);
+  if(self::hasMacro($method)){
+    return self::useClass($method,$params);
+  }else{
+   if(method_exists($this,$method)){
+    return call_user_func_array([$this, $method], $params);
+   }
+  }
  }
  
  /**
@@ -62,14 +74,7 @@ trait Macro
   */
  public static function useClass(string $method,array $params)
  {
-  $class=new self();
-  if(static::hasMacro($method)){
-   return self::getMacroTypeAction($method,$params);
-  }elseif(method_exists($class,$method)){
-   return call_user_func_array([$class,$method],[...$params]);
-  }elseif(method_exists($class,'__callMacro')){
-   return self::__callMacro($method,$params);
-  }
+  return self::getMacroTypeAction($method,$params);
  }
 
  /**
