@@ -140,7 +140,7 @@ class OceanWebTurk extends Container
        set_error_handler("\OceanWebTurk\Console::errorHandler");
        set_exception_handler("\OceanWebTurk\Console::exceptionHandler");
       }else{
-       $this->webHandler();
+        (new self())->webHandler();
       }
      }
      if(version_compare(PHP_VERSION,REQUIRED_PHP_VERSION,'<')){
@@ -170,7 +170,7 @@ class OceanWebTurk extends Container
         Console::run($_SERVER['argv']);
       }
      }else{
-      $this->web($routeMode);
+      (new self())->web($routeMode);
      }
     }
     
