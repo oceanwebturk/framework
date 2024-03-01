@@ -34,7 +34,7 @@ class Console
   * @param  string|array|callable $action
   * @param  array    $options
   */
- public static function command(string $name,string|array|callable $action,array $options=[])
+ public static function command(string $name,$action,array $options=[])
  {
   self::$commands[$name]=[
    'action'=>$action,
@@ -67,7 +67,7 @@ class Console
   * @param  string|array|object|callable $method
   * @param  array  $params
   */
- private static function callTypeMethod(string|array|object|callable $method,array $params)
+ private static function callTypeMethod($method,array $params)
  {
   echo call_user_func_array($method,[$params]);
  }

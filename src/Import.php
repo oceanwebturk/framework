@@ -35,7 +35,7 @@ class Import
   * @param  string $name
   * @param  object $action
   */
- public static function  createEngine(string $name,array|object $action): Import
+ public static function  createEngine(string $name,$action): Import
  {
   self::$engines[$name]=[
    'action' => $action

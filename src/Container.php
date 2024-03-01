@@ -37,7 +37,7 @@ class Container
   * @param  string $aliases
   * @param  array  $class
   */
- public static function alias(string $alias,string|array $class)
+ public static function alias(string $alias, $class)
  {
    self::$aliases[$alias]=$class;
  }
@@ -46,7 +46,7 @@ class Container
   * @param string|object  $abstract
   * @param string|callable|array $callback
   */
- public static function bind(string|object $abstract,string|callable|array $callback)
+ public static function bind(string|object $abstract,$callback)
  {
   self::$bindings[$abstract]=compact('callback');
  }
@@ -56,7 +56,7 @@ class Container
   * @param  array  $params
   * @return mixed
   */
- public static function make(string|object $name,array $params=[])
+ public static function make(string $name,array $params=[])
  {
   if(isset(self::$bindings[$name])){
    $arr=self::$bindings[$name]['callback'];

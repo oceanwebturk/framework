@@ -13,7 +13,7 @@ trait Macro
   * @param  string   $name    
   * @param  array|object|callable $callback
   */
- public static function macro(string $name,array|object|callable $macro)
+ public static function macro(string $name,$macro)
  {
    self::$macros[$name]=$macro;
  }

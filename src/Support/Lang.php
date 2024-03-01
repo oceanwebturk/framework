@@ -26,7 +26,7 @@ class Lang
  /**
   * @param  string|object $default
   */
- public static function default(string|object $default)
+ public static function default($default)
  {
   self::$default=$default;
   return new self;

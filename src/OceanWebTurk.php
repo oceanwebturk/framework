@@ -266,7 +266,7 @@ class OceanWebTurk extends Container
     /**
      * @param string|callable|array $engine
      */
-    public static function templateEngine(string|callable|array $engine)
+    public static function templateEngine($engine)
     {
      self::$configs['templateEngine']=$engine;
      return new self;
@@ -303,7 +303,7 @@ class OceanWebTurk extends Container
      * @param string|object $abstract
      * @param bool|boolean $force
      */
-    public function register(string|object $abstract,bool $force=false)
+    public function register(string $abstract,bool $force=false)
     {
      if(is_string($abstract)){
       $provider=$this->resolvedProvider($abstract);

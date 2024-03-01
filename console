@@ -2,7 +2,6 @@
 <?php
 $vendorAutoload=[
  __DIR__.'/../../autoload.php',
- __DIR__.'/../vendor/autoload.php',
  getcwd().'/bootstrap.php',
 ];
 foreach($vendorAutoload as$file){

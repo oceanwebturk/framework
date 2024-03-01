@@ -45,20 +45,20 @@ class Route
 
     /**
      * @param  string $uri
-     * @param  array|string|callable|null  $action
+     * @param    $action
      * @return Route
      */
-    public static function get(string $uri,array|string|callable|null $action = null,array $options=[]): Route
+    public static function get(string $uri, $action = null,array $options=[]): Route
     {
      return self::match("GET", $uri, $action,$options);
     }
 
     /**
      * @param  string $uri
-     * @param  array|string|callable|null  $action
+     * @param    $action
      * @return Route
      */
-    public static function post(string $uri,array|string|callable|null $action = null,array $options=[]): Route
+    public static function post(string $uri, $action = null,array $options=[]): Route
     {
      return self::match("POST", $uri, $action,$options);
     }
@@ -116,7 +116,7 @@ class Route
      * @param array $options
      * @return Route
      */
-    public static function match(string|array $method, string $uri, array|string|null|callable $action,array $options=[])
+    public static function match(string $method, string $uri, $action,array $options=[])
     {
      $controller=self::$controller;
      self::$method=$method;
@@ -216,7 +216,7 @@ class Route
     * @param  string|array  $action
     * @param  array  $params
     */
-   private function arrayOrStringParseRoute(array $props,string|array $action,array $params)
+   private function arrayOrStringParseRoute(array $props, $action,array $params)
    {
     $data=is_string($action) ? explode("::", $action) : $action;
     $namespace = $this->setControllerAndNamespace($action,$props['options'])['namespace'];
@@ -238,7 +238,7 @@ class Route
     * @param array $props
     * @return array
     */
-   private function setControllerAndNamespace(string|array $action,array $props): array
+   private function setControllerAndNamespace(string $action,array $props): array
    {
     $data=is_string($action) ? explode("::", $action) : $action;
     $className = $data[0];
