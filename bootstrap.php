@@ -1,5 +1,5 @@
 <?php
-define("OceanWebTurk_VERSION", "1.0");
+define("OceanWebTurk_VERSION", "0.1.9");
 define("REQUIRED_PHP_VERSION","7.4");
 $GLOBALS['_OCEANWEBTURK'] = [];
 if(!function_exists("request_uri")){
