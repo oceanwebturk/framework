@@ -160,7 +160,7 @@ class OceanWebTurk extends Container
      self::setLocale(Config::get("app")->lang);
      self::providerLists();
      if(\is_cli()){
-      if($_SERVER['COMPOSER_BINARY']){
+      if(isset($_SERVER['COMPOSER_BINARY'])){
        $method='post_'.$_SERVER['argv'][1].'_cmd';
        $class=new Composer();
        if(method_exists($class,$method)){
