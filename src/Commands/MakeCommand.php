@@ -13,7 +13,7 @@ class MakeCommand extends Command
  public function provider(array $params=[])
  {
   $file_sample=file_get_contents(GET_DIRS['SYSTEM'].'Views/provider.sample');
-  $class_name=ucfirst($params[1]);
+  $class_name=ucfirst($params[2]);
   $file_name=GET_DIRS['SERVICES'].$class_name.'.php';
   $content=str_replace(['{NAMESPACE}','{CLASS_NAME}'],
   [rtrim(GET_NAMESPACES['SERVICES'],'\\'),$class_name],$file_sample);

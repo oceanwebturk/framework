@@ -12,7 +12,7 @@ class HttpCommand extends Command
  public function controller(array $params=[])
  {
   $file_sample=file_get_contents(__DIR__.'/Views/controller.sample');
-  $class_name=ucfirst($params[1]);
+  $class_name=ucfirst($params[2]);
   $content=str_replace(['{NAMESPACE}','{CLASS_NAME}'],
   [rtrim(GET_NAMESPACES['CONTROLLERS'],'\\'),$class_name],$file_sample);
   $file_name=GET_DIRS['CONTROLLERS'].$class_name.'.php';
