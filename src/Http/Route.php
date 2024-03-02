@@ -179,9 +179,9 @@ class Route
     $route=array_key_last(array_filter(self::$routes,function($route)use($name){
      return isset($route['options']['as']) && $route['options']['as'] === $name;
     }));
-    return public_url().str_replace(array_map(function($key){
+    return public_url().(!array_keys($params) ? $route : str_replace(array_map(function($key){
      return '{:'.$key.'}';
-    },array_keys($params)),array_values($params),ltrim($route,'/'));
+    },array_keys($params)),array_values($params),$route));
    }
 
    public function run()
