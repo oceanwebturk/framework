@@ -238,7 +238,7 @@ class Route
     * @param array $props
     * @return array
     */
-   private function setControllerAndNamespace(string $action,array $props): array
+   private function setControllerAndNamespace($action,array $props): array
    {
     $data=is_string($action) ? explode("::", $action) : $action;
     $className = $data[0];
