@@ -9,14 +9,9 @@ class Lang
   * @var array
   */
  public static $paths=[
-  GET_DIRS["LANGS"],
-  'system'=>GET_DIRS['SYSTEM'].'Langs/',
+  0 => ['path' => GET_DIRS["LANGS"]],
+  'system' => ['path' => GET_DIRS['SYSTEM'].'Langs/','lang' => 'en'],
  ];
-
- /**
-  * @var string
-  */
- public static $appLang,$sysLang="en";
 
  /**
   * @var string|object|null|boolean
@@ -32,12 +27,13 @@ class Lang
   return new self;
  }
 
- /**
-  * @param string $lang
-  */
- public static function setAppLang(string $lang)
+ public static function set(string $name,string $path,string $lang='en')
  {
-  self::$appLang=$lang;
+  self::$paths[$name]=[
+    'path' => $path,
+    'lang' => $lang
+  ];
+  return new self;
  }
 
  /**
@@ -45,37 +41,19 @@ class Lang
   */
  public static function get(string $name)
  {
-   $args=self::setData($name);
-   $path=$args[0];
-   $phpFiles=[
-    'app'=>(isset(self::$paths[$path]) ? self::$paths[$path] : $path).self::$appLang.'/'.$args[1].".php",
-    'sys'=>(isset(self::$paths[$path]) ? self::$paths[$path] : $path).self::$sysLang.'/'.$args[1].".php"
-   ];
+  $args=self::setData($name);
+  $path=$args[0];
+  $files=[
+   'json_lang_code' => (isset(self::$paths[$path]) ? self::$paths[$path]['path'].self::$paths[$path]['lang'] : self::$paths[0]['path'].self::$paths[0]['lang']).".json"
+  ];
 
-   $jsonFiles=[
-    'app'=>(isset(self::$paths[$path]) ? self::$paths[$path] : $path).self::$appLang.'.json',
-    'sys'=>(isset(self::$paths[$path]) ? self::$paths[$path] : $path).self::$sysLang.'.json',
-   ];
+  $return=self::jsonDataGet($files['json_lang_code'],$name);
 
-   if(!str_starts_with("http://",$phpFiles['app']) || !str_starts_with("https://",$phpFiles['app']) || !str_starts_with("http://",$phpFiles['sys']) || !str_starts_with("https://",$phpFiles['sys'])){
-    if(file_exists($phpFiles['app'])){
-     $return=self::phpFile($phpFiles['app']);
-    }elseif(file_exists($phpFiles['sys'])){
-     $return=self::phpFile($phpFiles['sys']);
-    }
-   }
+  if($default=self::getDefault()){
+   $return=$return + $default;
+  }
 
-   if(file_exists($jsonFiles['app'])){
-    $return=self::jsonDataGet($jsonFiles['app'],$name);
-   }elseif(file_exists($jsonFiles['sys'])){
-    $return=self::jsonDataGet($jsonFiles['sys'],$name);
-   }
-
-   if($default=self::getDefault()){
-    $return=$return + $default;
-   }
-
-   return $return;
+  return $return;
  }
 
  /**

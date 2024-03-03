@@ -277,7 +277,7 @@ class OceanWebTurk extends Container
      */
     public static function setLocale(string $locale)
     {
-      Lang::$appLang=$locale;
+      Lang::$paths[0]['lang']=$locale;
     }
 
     /**
