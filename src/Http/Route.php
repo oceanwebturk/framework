@@ -179,14 +179,12 @@ class Route
     $route=array_key_last(array_filter(self::$routes,function($route)use($name){
      return isset($route['options']['as']) && $route['options']['as'] === $name;
     }));
-    return public_url().(array_keys($params) ? str_replace(array_map(function($key){
-     return '{:'.$key.'}';
-    },array_keys($params)),array_values($params),$route) : $route);
+    return public_url().(array_keys($params) ? str()->replace(array_map(fn($key) => '{:'.$key.'}' ,array_keys($params)),array_values($params),$route) : $route);
    }
 
    public function run()
    {
-    $url = str_replace(array_keys(self::$configs->uriReplaceCharacters),array_values(self::$configs->uriReplaceCharacters),urldecode(Request::security(Request::getUrl(),true)));
+    $url = str()->replace(array_keys(self::$configs->uriReplaceCharacters),array_values(self::$configs->uriReplaceCharacters),urldecode(Request::security(Request::getUrl(),true)));
     $domain=isset(self::$routes[URL::host()]) ? URL::host() : '';
     if(isset(self::$sites[URL::host()])){
      $this->customSite(URL::host());
@@ -247,16 +245,6 @@ class Route
    }
 
    /**
-    * @param object $class
-    */
-   private function filter_get(object $class)
-   {
-    if(method_exists($class,'handle')){
-     return $class->handle();
-    }
-   }
-
-   /**
     * @param  string $url
     * @param  string $domain
     */
@@ -293,7 +281,9 @@ class Route
        if(class_exists(self::$filters[$filter])){
         $class=self::$filters[$filter];
         $class=new $class();
-        $this->filter_get($class);
+        if(method_exists($class,'handle')){
+          return $class->handle();
+        }
        }
      },$filters);
     }

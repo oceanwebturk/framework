@@ -78,7 +78,7 @@ class DatabaseCommand extends Command
   $migration_name=$params[2];
   $migration_sample=file_get_contents(__DIR__.'/samples/migration.sample');
   $migration_file=GET_DIRS['MIGRATIONS'].date("dmY_His")."_".$migration_name."_table.php";
-  $content=str_replace("{TABLE_NAME}",$migration_name,$migration_sample);
+  $content=str()->replace("{TABLE_NAME}",$migration_name,$migration_sample);
   Filesystem::createFile($migration_file,$content);
   $this->write("\n  ".sprintf(lang("system::created_message"),ucfirst(lang("system::public")['migration']),$migration_file)."\n");
  }

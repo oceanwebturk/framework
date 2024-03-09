@@ -44,7 +44,7 @@ class Request
         if ($position !== false) {
             $path = substr($path, 0, $position);
         }
-        return str_replace([$dirname, $basename], '', $path);
+        return str()->replace([$dirname, $basename],'',$path);
     }
 
     /**

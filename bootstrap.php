@@ -2,11 +2,19 @@
 define("OceanWebTurk_VERSION", "0.1.11");
 define("REQUIRED_PHP_VERSION","7.4");
 $GLOBALS['_OCEANWEBTURK'] = [];
+
+if(!function_exists("str")){
+ function str()
+ {
+  return new OceanWebTurk\Support\Str();
+ }
+}
+
 if(!function_exists("request_uri")){
 function request_uri($path = __DIR__)
 {
     $root = "";
-    $dir = str_replace('\\', '/', realpath($path));
+    $dir = strtr('\\', '/', realpath($path));
     if(!empty($_SERVER['CONTEXT_PREFIX'])) {
         $root .= $_SERVER['CONTEXT_PREFIX'];
         $root .= substr($dir, strlen($_SERVER['CONTEXT_DOCUMENT_ROOT']));
