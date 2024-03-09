@@ -80,7 +80,7 @@ class Console
   Command::write(sprintf(
    ' OceanWebTurk v%s
   ',
-   OceanWebTurk_VERSION
+   OCEANWEBTURK_VERSION
   ));
  }
 

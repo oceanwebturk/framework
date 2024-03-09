@@ -17,18 +17,17 @@ class PackageManifest{
   */
  public function config(string $key)
  {
-  return isset($this->getManifest()['extra']['oceanwebturk'][$key]) ? $this->getManifest()['extra']['oceanwebturk'][$key] : [];
+  return isset($this->getJsonManifest()['extra']['oceanwebturk'][$key]) ? $this->getJsonManifest()['extra']['oceanwebturk'][$key] : [];
  }
  
  /**
   * @return array
   */
- public function getManifest(): array
+ public function getJsonManifest(): array
  {
   $return=[];
-  $autoPackages=json_decode(file_get_contents(GET_DIRS['VENDOR']."composer/installed.json"),true)['packages'];
-  $packages=array_merge([json_decode(file_get_contents(REAL_BASE_DIR."composer.json"),true)],$autoPackages);
-  for ($i=0;$i<count($packages);$i++){ 
+  $packages=json_decode(file_get_contents(GET_DIRS['VENDOR']."composer/installed.json"),true)['packages'];
+  for ($i=0;$i<count($packages);$i++){
    $return=array_merge($return,$packages[$i]);
   }
   return $return;
