@@ -32,4 +32,12 @@ class PackageManifest{
   }
   return $return;
  }
+
+ /**
+  * @return array
+  */
+ public function getXmlManifest(): array
+ {
+
+ }
 }

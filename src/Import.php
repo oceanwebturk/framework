@@ -73,7 +73,7 @@ class Import
    }else{
     $engine=self::$engines[OceanWebTurk::$configs['templateEngine']];
    }
-   $packages=(new PackageManifest())->getManifest();
+   $packages=(new PackageManifest())->getJsonManifest();
    if(isset($engine['package']) && !in_array($engine['package'],$packages)){
     throw new \Exception(sprintf(lang("system::not_found"),$engine['package']), 1);
    }
