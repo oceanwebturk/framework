@@ -198,7 +198,7 @@ class Route
     * @param array $params
     * @param array $props
     */
-   private function setActionTypeController(string|array|callable $action,array $params,array $props)
+   private function setActionTypeController($action,array $params,array $props)
    {
     if(is_callable($action)) {
       echo call_user_func_array($action, $params);

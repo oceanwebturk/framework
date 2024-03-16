@@ -61,7 +61,7 @@ use OceanWebTurk\Http\Route;
 use OceanWebTurk\Support\Lang;
 
 if(!function_exists("app")){
- function app(string|object $abstract=null,array $params=[]){
+ function app($abstract=null,array $params=[]){
   return \OceanWebTurk\OceanWebTurk::getInstance()->make($abstract,$params);
  }
 }
@@ -91,13 +91,13 @@ if(!function_exists("do_action")){
 }
 
 if(!function_exists("add_action")){
- function add_action(string $name,string|callable $callback){
+ function add_action(string $name,$callback){
     Hook::add($name, $callback);
  }
 }
 
 if(!function_exists("remove_action")){
- function remove_action(string $name,string|callable $callback){
+ function remove_action(string $name,$callback){
      Hook::remove($name, $callback);
  }
 }

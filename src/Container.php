@@ -46,7 +46,7 @@ class Container
   * @param string|object  $abstract
   * @param string|callable|array $callback
   */
- public static function bind(string|object $abstract,$callback)
+ public static function bind($abstract,$callback)
  {
   self::$bindings[$abstract]=compact('callback');
  }
