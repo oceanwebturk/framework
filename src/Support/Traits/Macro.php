@@ -45,7 +45,7 @@ trait Macro
   if(self::hasMacro($method)){
     return self::useClass($method,$params);
   }else{
-   if(method_exists(self,$method)){
+   if(method_exists((new self()),$method)){
     return call_user_func_array([self::class, $method], $params);
    }
   }

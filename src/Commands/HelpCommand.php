@@ -29,7 +29,7 @@ class HelpCommand extends Command
  {
   $file=file_exists(REAL_BASE_DIR."server.php") ? REAL_BASE_DIR."server.php" : GET_DIRS['SYSTEM'].'Support/CLIServe.php';
   $php = escapeshellarg(PHP_BINARY);
-  $host = "localhost";
+  $host = "127.0.0.1";
   $port = intval(isset(OceanWebTurk::$configs['APP_PORT']) ? OceanWebTurk::$configs['APP_PORT'] : 8008);
   $rewrite = escapeshellarg(__DIR__.'/Support/CLIServe.php');
   $command = $php." -S ".$host.":".$port." -t ".GET_DIRS["DIRECTORY_ROOT"];

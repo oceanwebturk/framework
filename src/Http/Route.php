@@ -32,6 +32,11 @@ class Route
     /**
      * @var array
      */
+    public static $headTags=[],$bodyOpenedTags=[],$bodyClosedTags=[];
+
+    /**
+     * @var array
+     */
     public static $patterns = [
      '{:id[0-9]?}' => '([0-9]+)',
      '{:url[0-9]?}' => '([a-z]+)',
@@ -116,7 +121,7 @@ class Route
      * @param array $options
      * @return Route
      */
-    public static function match(string $method, string $uri, $action,array $options=[])
+    public static function match($method, string $uri, $action,array $options=[])
     {
      $controller=self::$controller;
      self::$method=$method;
@@ -176,10 +181,11 @@ class Route
     */
    public static function url(string $name,array $params=[])
    {
-    $route=array_key_last(array_filter(self::$routes,function($route)use($name){
+   	$domain=isset(self::$routes[URL::host()]) ? URL::host() : '';
+    $route=array_key_last(array_filter(self::$routes[$domain],function($route)use($name){
      return isset($route['options']['as']) && $route['options']['as'] === $name;
     }));
-    return public_url().(array_keys($params) ? str()->replace(array_map(fn($key) => '{:'.$key.'}' ,array_keys($params)),array_values($params),$route) : $route);
+    return URL::protocol().'://'.URL::host().(array_keys($params) ? str()->replace(array_map(fn($key) => '{:'.$key.'}' ,array_keys($params)),array_values($params),$route) : $route);
    }
 
    public function run()
@@ -225,7 +231,7 @@ class Route
     $class=new $className();
     $method = isset($data[1]) ? $data[1] : self::$configs->defaultFunction;
     if(method_exists($class,$method)){
-     echo call_user_func_array([$class,$method], $params);
+      echo call_user_func_array([$class,$method], $params);
     }else{
      throw new \Exception(sprintf(lang("system::method_not_found"),$namespace.$className.'::'.$method), 1);
     }
@@ -264,9 +270,8 @@ class Route
       }
       $this->filterRun($props);
       $this->setActionTypeController($action,$params,$props);
-     }else{
-      http_response_code(404);
      }
+     http_response_code(404);
     }
    }
 

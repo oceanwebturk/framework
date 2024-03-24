@@ -21,7 +21,7 @@ class URL
     }
     public static function protocol()
     {
-        return ((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || @$_SERVER['SERVER_PORT'] == 443 ? 'https' : 'http');
+        return ((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || isset($_SERVER['SERVER_PORT']) && $_SERVER['SERVER_PORT'] == 443 ? 'https' : 'http');
     }
     public static function base()
     {

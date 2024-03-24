@@ -15,7 +15,7 @@ return new class extends Migration{
  {
   $this->int("id");
   $this->string("name")->length(255);
-  $this->primaryKey('id');
+  $this->primaryKey("id");
   $this->uniqueKey("name");
   $this->create();
  }

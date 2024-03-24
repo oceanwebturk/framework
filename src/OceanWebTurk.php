@@ -328,7 +328,7 @@ class OceanWebTurk extends Container
      ob_start();
      echo self::getApplication() ? call_user_func([self::getApplication(),'execute']) : '';
      Http\Route::mode($routeMode)->run();
-     echo \minify(ob_get_clean(),(isset(self::getApplication()->minify) ? self::getApplication()->minify : (isset($GLOBALS['_OCEANWEBTURK']['MINIFY']) ? $GLOBALS['_OCEANWEBTURK']['MINIFY'] : Config::setDriver("config")->get("app")->minify)));
+     echo \minify(ob_get_contents(),(isset($GLOBALS['_OCEANWEBTURK']['MINIFY']) ? $GLOBALS['_OCEANWEBTURK']['MINIFY'] : Config::setDriver("config")->get("app")->minify));
     }
 
     /**

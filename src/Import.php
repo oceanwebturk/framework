@@ -2,6 +2,8 @@
 
 namespace OceanWebTurk;
 
+use DOMDocument;
+
 class Import
 {
  use Support\Traits\Macro;
@@ -35,7 +37,7 @@ class Import
   * @param  string $name
   * @param  object $action
   */
- public static function  createEngine(string $name,$action): Import
+ public static function createEngine(string $name,$action): Import
  {
   self::$engines[$name]=[
    'action' => $action
@@ -65,14 +67,7 @@ class Import
   */
  public static function view(string $name,array $data = [])
  {
-   if(strpos($name,"::")){
-    $ex=explode("::",$name);
-    if($configs=self::$paths[$ex[0]]){
-     $engine=self::$engines[$configs['templateEngine']];
-    }
-   }else{
-    $engine=self::$engines[OceanWebTurk::$configs['templateEngine']];
-   }
+   $engine=self::engineControl($name);
    $packages=(new PackageManifest())->getJsonManifest();
    if(isset($engine['package']) && !in_array($engine['package'],$packages)){
     throw new \Exception(sprintf(lang("system::not_found"),$engine['package']), 1);
@@ -84,6 +79,20 @@ class Import
    ];
    $data=array_merge($data,self::$shareds);
    return self::callTypeTemplateEngine($engine,$args,$data);
+ }
+
+ public static function engineControl($name)
+ {
+  if(strpos($name,"::")){
+    $ex=explode("::",$name);
+    if($configs=self::$paths[$ex[0]]){
+     $engine=self::$engines[$configs['templateEngine']];
+    }
+   }else{
+    $engine=self::$engines[OceanWebTurk::$configs['templateEngine']];
+  }
+
+  return $engine;
  }
 
  public static function callTypeTemplateEngine($engine,$args,$data)
