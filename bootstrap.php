@@ -5,9 +5,9 @@ $GLOBALS['_OCEANWEBTURK'] = [
  'BLACKBOX_AI_URL' => 'https://www.blackbox.ai/agent/OceanWebTurkVzldXUh'
 ];
 if(!function_exists("str")){
- function str()
+ function str($str='')
  {
-  return new OceanWebTurk\Support\Str();
+  return OceanWebTurk\Support\Str::text($str);
  }
 }
 
@@ -52,7 +52,9 @@ if(!function_exists("is_cli")){
 
 if(!function_exists("dd")){
  function dd($text){
-  return OceanWebTurk\Output::write($text);
+  echo "<pre>";
+  print_r($text);
+  echo "</pre>";
  }
 }
 

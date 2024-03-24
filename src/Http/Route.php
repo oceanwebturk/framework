@@ -231,7 +231,7 @@ class Route
     $class=new $className();
     $method = isset($data[1]) ? $data[1] : self::$configs->defaultFunction;
     if(method_exists($class,$method)){
-      echo call_user_func_array([$class,$method], $params);
+      return call_user_func_array([$class,$method], $params);
     }else{
      throw new \Exception(sprintf(lang("system::method_not_found"),$namespace.$className.'::'.$method), 1);
     }

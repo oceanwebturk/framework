@@ -41,6 +41,7 @@ class ServiceProvider
          \OceanWebTurk\ApplicationServiceProvider::class,
          \OceanWebTurk\Http\HttpServiceProvider::class,
          \OceanWebTurk\Database\DatabaseServiceProvider::class,
+         \OceanWebTurk\Debugbar\Debugbar::class,
         ];
         return new self();
     }
