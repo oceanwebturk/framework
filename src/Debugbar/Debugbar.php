@@ -42,7 +42,6 @@ class Debugbar
     self::$collectors[]=new $collector();
    }
   }
-  self::run();
  }
 
  /**
@@ -68,6 +67,5 @@ class Debugbar
   foreach (self::$collectors as$collector){
    $data['collectors'][]=$collector->getDataArray();
   }
-  print_r($data);
  }
 }
