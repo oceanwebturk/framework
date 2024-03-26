@@ -1,5 +1,5 @@
 <?php
-defined('OCEANWEBTURK_VERSION') || define("OCEANWEBTURK_VERSION", "0.1.18");
+defined('OCEANWEBTURK_VERSION') || define("OCEANWEBTURK_VERSION", "0.2.3");
 defined('REQUIRED_PHP_VERSION') || define("REQUIRED_PHP_VERSION","7.4");
 $GLOBALS['_OCEANWEBTURK'] = [
  'BLACKBOX_AI_URL' => 'https://www.blackbox.ai/agent/OceanWebTurkVzldXUh'
