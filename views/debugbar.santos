@@ -1,0 +1,3 @@
+<div id="owt-debugbar-container">
+<div class="debugbar-right debugbar-flex"><p id="lang-version">{{PHP_VERSION}}</p></div>
+</div>

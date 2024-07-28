@@ -1,0 +1,7 @@
+#!/usr/bin/env php
+<?php
+if(file_exists(rtrim(getcwd(), '/').'/bootstrap.php')){
+  require rtrim(getcwd(), '/').'/bootstrap.php';
+}
+
+$app->run();

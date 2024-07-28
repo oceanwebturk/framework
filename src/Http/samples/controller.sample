@@ -1,0 +1,12 @@
+<?php
+namespace [CONTROLLER_NAMESPACE];
+
+use OceanWebTurk\Framework\Http\Controller;
+
+class [CONTROLLER_NAME] extends Controller
+{
+ public function index()
+ {
+  // Code
+ }
+}
