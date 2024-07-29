@@ -133,6 +133,7 @@ class Santos
 
   $this->view = preg_replace("/@if\s*\((.*?)\)\s*/","<?php if($1): ?>",$this->view);
   $this->view = preg_replace("/@isset\s*\((.*?)\)\s*/","<?php if(isset($1)): ?>",$this->view);
+  $this->view = str_replace("@else","<?php else: ?>",$this->view);
   $this->view = str_replace("@endif","<?php endif; ?>",$this->view);
   
   $this->view = preg_replace("/@foreach\s*\((.*?)\)\s*/","<?php foreach($1): ?>",$this->view);  
