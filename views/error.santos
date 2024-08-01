@@ -1,6 +1,5 @@
-<!DOCTYPE html><html><head><meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>{{$message}}</title>
-</head><body>
-  <h2>{{$message}}</h2>
-</body></html>
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>{{$message}}</title>
+<style type="text/css">header{background:#004694;padding:3rem;border-radius:1.4rem;}header > *{color:antiquewhite;}header h1{text-align:center;}header a{font-size:1.8rem;}header span#type{border:1px solid white;padding:6px;border-radius:15px;}</style>
+</head><body data-body="{{$type}}" style="background:black;"><header><h1><span id="type">{{ucfirst($type)}}</span> {{$message}}</h1><a href="{{$editorURI}}"><span>{{$file}} : {{$line }}</span></a>
+<div style="float:right;"><p>PHP: {{PHP_VERSION}} | Framwork: {{OCEANWEBTURK_VERSION}}</p></div></header></body></html>

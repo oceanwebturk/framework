@@ -16,11 +16,6 @@ class Container
     public static $instance = null;
     
     /**
-     * @var array
-     */
-    protected $services = [];
-    
-    /**
      * @return mixed
      */ 
     protected $aliases = [];
@@ -77,37 +72,5 @@ class Container
       $resolver = $this->bindings[$key];
       return call_user_func($resolver);
      }
-    }
-   
-    /**
-     * @param mixed $name
-     * @return mixed
-     */
-    public function get($name)
-    {
-      if(isset($this->services[$name])){
-        $service = $this->services[$name]['closure'];
-        if(class_exists($service)){
-          return new $service($this);
-        }else{
-          return $this->services[$name]['closure']();
-        }
-      }
-      $reflector = new \ReflectionClass($name);
-      if(!$reflector->isInstantiable()){
-        throw new Exception("Class {$name} is not instantiable");
-      }
-
-      $constructor = $reflector->getConstructor();
-      if(is_null($constructor)){
-        return new $name;
-      }
-      
-      $paramteres = $constructor->getParameters();
-      $dependices = array_map(function($paramter){
-        return $this->get($paramter->name);
-      },$paramteres); 
-
-      return $reflector->newInstanceArgs($dependices);
     }
 }

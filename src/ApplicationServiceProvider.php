@@ -23,9 +23,12 @@ class ApplicationServiceProvider extends ServiceProvider
   ]);
    
   $this->app->get(Santos::class)->addPath(GET_DIRS['SYSTEM'].'../views/','system');
-
   $this->app->get(Lang::class)->addPath(GET_DIRS['LANGS'],'default',[
     'lang' => config("app")['lang']
+  ]);
+
+  $this->app->get(Lang::class)->addPath(__DIR__.'/../langs/','system',[
+    'lang' => config("system:system")['lang']
   ]);
  }
 }

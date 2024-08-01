@@ -113,8 +113,11 @@ class Route
  {
   $defaultLang = (new Lang())->getLang('default');
   $route=array_key_last(array_filter(self::$routes,function($route)use($name,$defaultLang){
-    return isset($route['options']['as']) && $route['options']['as'] === $name &&
-    isset($route['options']['lang']) && $route['options']['lang'] === $defaultLang;
+    if(isset($route['options']['asLang'])){
+     return isset($route['options']['as']) && $route['options']['as'] === $name && 
+     $route['options']['lang'] === $defaultLang;
+    }
+    return isset($route['options']['as']) && $route['options']['as'] === $name;
   }));
 
   return URL::protocol().'://'.str_replace(['{{CURRENT_DOMAIN}}','{:locale}'],
@@ -152,10 +155,11 @@ class Route
     $path = str_replace('{{CURRENT_DOMAIN}}','',$path);
    }
    $pattern = '#^'.$this->regexChanger($path).'$#';
-   
+
    if(preg_match($pattern,$url,$params)){
     array_shift($params);
     $callback = $props['callback'];
+    http_response_code(200);
 
     if(isset($props['options']['lang'])){
       $lang->setLang($props['options']['lang']);
@@ -165,6 +169,7 @@ class Route
       $lang->setLang($params[0]); 
     }
     header("Content-Language: ".$lang->getLang());
+    
     $props['_url'] = $url;
     $props['lang'] = $lang;
     if(isset($props['options']['key'])){
@@ -178,7 +183,6 @@ class Route
     }elseif(is_string($callback)){
       $this->stringOrArrayCall(null,explode("::",$callback),$params,$props);
     }
-
    }
   }
  }
@@ -195,6 +199,11 @@ class Route
   $className = self::$configs['defaultNamespace'].$args[0];
   $class = new $className();
   $method = (isset($args[1]) ? $args[1] : self::$configs['defaultMethod']);
+  
+  if(!method_exists($class,$method)){ 
+    http_response_code(500);
+    throw new \Exception(sprintf(lang("system:method_not_found"),$className.'::'.$method));
+  }
 
   if(class_exists(\SuperWeb::class)){ 
     $superweb = new \SuperWeb();

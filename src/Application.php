@@ -43,6 +43,11 @@ class Application extends Container
    * @var array
    */
   public static $namespaces = [];
+
+  /**
+   * @var array
+   */
+  protected $services = [];
   
   /**
    * @var array
@@ -194,8 +199,6 @@ class Application extends Container
    if(function_exists("is_cli") && !is_cli()){
    session_start(['cookie_secure' => (URL::protocol() == 'https' ? true : false),'cookie_httponly' => true]);session_encode();}
 
-   set_error_handler("OceanWebTurk\Framework\Application::errorHandler");
-   set_exception_handler("OceanWebTurk\Framework\Application::exceptionHandler");
    define("REAL_BASE_DIR",$this->rootDir);
 
    $project_dirs = $this->projectType.'_Paths';
@@ -204,11 +207,17 @@ class Application extends Container
    $project_namespace = $this->projectType.'_Namespaces';
    define('GET_NAMESPACES',self::$project_namespace());
 
+   set_error_handler("OceanWebTurk\Framework\Application::errorHandler");
+   set_exception_handler("OceanWebTurk\Framework\Application::exceptionHandler");
    $this->coreAliases();
+   $appConfig = $this->get(Config::class)->get("app");
+   if(isset($appConfig['mode']) && $appConfig['mode']=='development'){
+    ini_set("error_reporting",1);
+    error_reporting(E_ALL);
+   }
+
    define("COMPOSER_INSTALLED_FILE",GET_DIRS['VENDOR'].'composer/installed.json');
-
    $packages = file_exists(COMPOSER_INSTALLED_FILE) ? json_decode(file_get_contents(COMPOSER_INSTALLED_FILE))->packages : (Object) [];
-
    if(file_exists(COMPOSER_INSTALLED_FILE)){
     for($i=0;$i<count($packages);$i++){
 
@@ -231,11 +240,10 @@ class Application extends Container
     } 
    }
 
-   $appConfig = $this->get(Config::class)->get("app");
    array_map(function($provider){
     $class = GET_NAMESPACES['PROVIDERS'].str_replace([GET_DIRS['PROVIDERS'],'.php'],'',$provider);
     $this->boot((new $class($this)));
-   },glob(GET_DIRS['PROVIDERS'].'*.php')); 
+   },glob(GET_DIRS['PROVIDERS'].'*.php'));
 
    if(is_cli()){
     echo $this->cli->init($this)->run(array_slice($_SERVER['argv'],1));
@@ -284,33 +292,34 @@ class Application extends Container
   /**
    * @return mixed
    */
-  public static function errorHandler()
-  {}
+  public static function errorHandler(int $errno,string $errstr,string $errfile,int $errline)
+  {
+    $type = 'error';
+    
+  }
   
   /**
    * @return mixed
    */
   public static function exceptionHandler($e)
   {
-   $message = '   Message & Code : '.$e->getCode().' | '.$e->getMessage().PHP_EOL;
-   $message.= '   File & Line: '.$e->getFile().':'.$e->getLine().PHP_EOL;
-   $message.= '   Traces: '.PHP_EOL;
+   $message = $e->getMessage();
    $trace = $e->getTrace();
+   $file = str_replace(str_replace('/','\\',REAL_BASE_DIR),'',$e->getFile());
+   $line = $e->getLine();
+   $type = 'exception';
+   $editorURI = str_replace(['{{$file}}','{{$line}}'],[$e->getFile(),$line],self::$editors[config("app")['editor']]['url']);
+   
+   $output = '   Message & Code : '.$e->getCode().' | '.$message.PHP_EOL;
+   $output.= '   File & Line: '.$file.':'.$line.PHP_EOL;
+   $output.= '   Traces: '.PHP_EOL;
    for ($i=0;$i<count($trace);$i++){ 
-    $message.= '   File & Line: '.$trace[$i]['file'].' | '.$trace[$i]['line'].PHP_EOL;
+    $output.= '   File & Line: '.$trace[$i]['file'].' | '.$trace[$i]['line'].PHP_EOL;
    }
    if(is_cli()){
-    echo PHP_EOL.$message;
+    echo PHP_EOL.$output;
    }else{
-    $message = '   Message & Code : '.$e->getCode().' | '.$e->getMessage()."<br>";
-    $message.= '   File & Line: <a href="'.str_replace(['{{$file}}','{{$line}}'],
-    [$e->getFile(),$e->getLine()],self::$editors['subl']['url']).'">'.$e->getFile().':'.$e->getLine().'</a><br>';
-    $message.= '   Traces: '."<br>";
-    $trace = $e->getTrace();
-    for ($i=0;$i<count($trace);$i++){ 
-     $message.= '   File & Line: '.$trace[$i]['file'].' | '.$trace[$i]['line']."<br>";
-    }
-    echo $message;
+    echo view("system:error",compact("message","file","line","trace","type","editorURI"));
    }
   }
   

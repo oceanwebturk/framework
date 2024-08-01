@@ -58,7 +58,10 @@ class Lang
   */
  public function get(string $name)
  {
-  $lang = self::$paths['default']['path'].self::$paths['default']['options']['lang'];
+  $ex = explode(":",$name);
+  $path = isset($ex[1]) ? $ex[0] : 'default';
+  $name = isset($ex[1]) ? $ex[1] : $name;
+  $lang = self::$paths[$path]['path'].self::$paths[$path]['options']['lang'];
   if(file_exists($lang.'.json')){
     return json_decode(file_get_contents($lang.'.json'),true)[$name];
   }
