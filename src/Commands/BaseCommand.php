@@ -89,7 +89,7 @@ abstract class BaseCommand
   },$options);
 
   $array =  $style + [$this->colors[$color]] + $bg_colors;
-  echo $message;
+  echo ' '.$message;
  }
  
  /**
