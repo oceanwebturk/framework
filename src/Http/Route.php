@@ -144,12 +144,9 @@ class Route
  public function run()
  {
   $url = Request::security(Request::getUrl(),true);
-  if(isset(self::$configs['auto_view_load']) && self::$configs['auto_view_load']==true 
-    && !defined('VIEW_PATH')){
-    define('VIEW_PATH',GET_DIRS['VIEWS']);
-  }
-  $lang = new Lang();
-  
+  $lang = new Lang();    
+  $debugbar = new Debugbar();
+
   foreach(self::$routes as$path=>$props){
    if(str_starts_with($path,'{{CURRENT_DOMAIN}}')){
     $path = str_replace('{{CURRENT_DOMAIN}}','',$path);
@@ -175,7 +172,7 @@ class Route
     if(isset($props['options']['key'])){
       $props['_key']=$props['options']['key'];
     }
-
+    
     if(is_callable($callback)){
       echo call_user_func_array($callback,[$params]);
     }elseif(is_array($callback)){
@@ -196,10 +193,10 @@ class Route
   */
  private function stringOrArrayCall($class = null,array $args = [],array $params = [],array $options = [])
  {
-  $className = self::$configs['defaultNamespace'].$args[0];
+  $className = (isset($options['options']['namespace']) ? $options['options']['namespace'] : self::$configs['defaultNamespace']).$args[0];
   $class = new $className();
   $method = (isset($args[1]) ? $args[1] : self::$configs['defaultMethod']);
-  
+
   if(!method_exists($class,$method)){ 
     http_response_code(500);
     throw new \Exception(sprintf(lang("system:method_not_found"),$className.'::'.$method));
@@ -222,26 +219,25 @@ class Route
     }
   }
 
-  if(self::$configs['mode']=="development"){
-    $debugbar = new Debugbar();
-    echo str_replace(['</head>','</body>'],[$debugbar->header().'</head>',
-    $debugbar->body().'</body>'],call_user_func_array([$class,$method],[$params]));
-  }else{
-   echo call_user_func_array([$class,$method],[$params]);
-  }
-  
+  echo call_user_func_array([$class,$method],[$params]);
+  $options['viewPath'] = $GLOBALS['_OCEANWEBTURK']['VIEWS']['argv']['path'];
   $data = ['_params'=>$params];
   if(isset(Controller::$viewData)){
     $data = array_merge($data,Controller::$viewData);
   }
-  
+
+  $controllerControl = true;
+  if(isset($class::$autoViewLoad)){
+    $controllerControl = $class::$autoViewLoad;
+  }
+
   if(isset(self::$configs['auto_view_load']) 
-    && self::$configs['auto_view_load']==true){
-    return array_map(function($view)use($method,$params,$data){
-      if(str_starts_with($view,VIEW_PATH.$method)){
+    && self::$configs['auto_view_load']==true && $controllerControl){
+    return array_map(function($view)use($method,$params,$data,$options){
+      if(str_starts_with($view,$options['viewPath'].$method)){
        echo view($method,$data);
       }
-    },glob(VIEW_PATH.'*'));
+    },glob($options['viewPath'].'*'));
   }
  }
 }

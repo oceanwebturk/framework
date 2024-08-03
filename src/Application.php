@@ -247,8 +247,8 @@ class Application extends Container
 
    if(is_cli()){
     echo $this->cli->init($this)->run(array_slice($_SERVER['argv'],1));
-   }else{
-    ob_start();
+   }else{    
+    ob_start();    
     echo (new Http\Route())->run();
     echo ob_get_clean();
    }
@@ -329,7 +329,8 @@ class Application extends Container
   private function coreAliases()
   {
    foreach([
-    'URL' => URL::class
+    'URL' => URL::class,
+    'Controller' => Http\Controller::class
    ]as$key=>$alias){
    $this->alias($alias,$key);
   }

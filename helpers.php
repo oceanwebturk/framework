@@ -2,6 +2,7 @@
 
 use OceanWebTurk\Framework\Application;
 use OceanWebTurk\Framework\Config;
+use OceanWebTurk\Framework\Import;
 
 define("OCEANWEBTURK_VERSION","1.0");
 
@@ -38,5 +39,18 @@ if(!function_exists("config")){
   function config(string $name)
   {
    return (new Config())->get($name);
+  }
+}
+
+if(!function_exists("view")){
+  /**
+   * @param string $name
+   * @param array $params
+   * @param array $options
+   * @return mixed
+   */
+  function view(string $name,array $params = [],array $options = [])
+  {
+   return Import::view($name,$params,$options);
   }
 }

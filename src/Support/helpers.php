@@ -1,21 +1,7 @@
 <?php
 
 use OceanWebTurk\Framework\Support\Lang;
-use OceanWebTurk\Framework\Support\Santos;
 use OceanWebTurk\Framework\Support\Security;
-
-if(!function_exists("view")){
-  /**
-   * @param string $name
-   * @param array $params
-   * @param array $options
-   * @return mixed
-   */
-  function view(string $name,array $params = [],array $options = [])
-  {
-   return (new Santos())->view($name,$params,$options);
-  }
-}
 
 if(!function_exists("lang")){
   /**

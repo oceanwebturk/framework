@@ -15,19 +15,16 @@ class ApplicationServiceProvider extends ServiceProvider
  {
   $this->app->get(Config::class)->addPath(GET_DIRS['CONFIGS']);
   $this->app->get(Config::class)->addPath(GET_DIRS['SYSTEM'].'../etc/','system');
-
-  $this->app->get(Santos::class)->configs([
-    'view' => GET_DIRS['VIEWS'],
-    'cache' => GET_DIRS['CACHE'],
-    'cache_mode' => true
-  ]);
-   
-  $this->app->get(Santos::class)->addPath(GET_DIRS['SYSTEM'].'../views/','system');
-  $this->app->get(Lang::class)->addPath(GET_DIRS['LANGS'],'default',[
+  
+  Import::setEngines(config('system:engines')['template']);
+  Import::addPath(GET_DIRS['VIEWS'],'default',['cache' => GET_DIRS['CACHE'],'cache_mode' => true]);
+  Import::addPath(GET_DIRS['SYSTEM'].'../views/','system');
+  
+  Lang::addPath(GET_DIRS['LANGS'],'default',[
     'lang' => config("app")['lang']
   ]);
 
-  $this->app->get(Lang::class)->addPath(__DIR__.'/../langs/','system',[
+  Lang::addPath(__DIR__.'/../langs/','system',[
     'lang' => config("system:system")['lang']
   ]);
  }

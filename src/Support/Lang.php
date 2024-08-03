@@ -19,7 +19,7 @@ class Lang
   * @param array $options
   * @return mixed
   */
- public function addPath(string $path,string $name = 'default',array $options = [])
+ public static function addPath(string $path,string $name = 'default',array $options = [])
  {
   self::$paths[$name] = ['path'=>$path,'options' => $options];
  }

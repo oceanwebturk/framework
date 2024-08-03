@@ -28,11 +28,6 @@ class Santos
   * @var string
   */
  public $viewPath;
-
- /**
-  * @var array
-  */
- public static $paths = [];
  
  /**
   * @var array
@@ -44,19 +39,6 @@ class Santos
   */
  public $data = [];
  
- /**  
-  * @param string $path
-  * @param string $name
-  * @return mixed
-  */
- public function addPath(string $path,string $name = 'default')
- {
-  self::$paths[$name] = [
-    'path' => $path
-  ];
-  return new self();
- }
-
  /**
   * @param array $configs
   * @return mixed
@@ -79,15 +61,13 @@ class Santos
   extract($data); 
   self::$configs = array_merge(self::$configs,$options);
 
-  $ex = explode(":",$name);  
-
   if (!$extends) {
-    $this->viewName = (isset($ex[1]) ? $ex[1] : $name);
-    $this->viewPath = (isset($ex[1]) ? self::$paths[$ex[0]]['path'] : self::$configs['view']).$this->parseViewName((isset($ex[1]) ? $ex[1] : $name));
+    $this->viewName = $name;
+    $this->viewPath = self::$configs['view'].$this->parseViewName($name);
     $this->data = $data;
   }
 
-  $viewPath = (isset($ex[1]) ? self::$paths[$ex[0]]['path'] : self::$configs['view']).$this->parseViewName((isset($ex[1]) ? $ex[1] : $name));
+  $viewPath = self::$configs['view'].$this->parseViewName($name);
 
   $this->view = file_get_contents($viewPath);
   $this->parse();

@@ -1,6 +1,7 @@
 <?php
 namespace OceanWebTurk\Framework\Http;
 
+use OceanWebTurk\Framework\Import;
 use OceanWebTurk\Framework\Support\Lang;
 use OceanWebTurk\Framework\Support\Traits\Macro;
 
@@ -27,11 +28,17 @@ class Controller
    * @var URL
    */
   public $url;
+  
+  /**
+   * @var Import
+   */
+  public $import;
 
   public function __construct()
   {
    $this->url = new URL();
    $this->lang = new Lang();
+   $this->import = new Import();
    $this->request = new Request();
   }
   
