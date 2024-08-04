@@ -220,7 +220,7 @@ class Route
   }
 
   echo call_user_func_array([$class,$method],[$params]);
-  $options['viewPath'] = $GLOBALS['_OCEANWEBTURK']['VIEWS']['argv']['path'];
+  $options['viewPath'] = isset($GLOBALS['_OCEANWEBTURK']['VIEWS']['argv']['path']) ? $GLOBALS['_OCEANWEBTURK']['VIEWS']['argv']['path'] : GET_DIRS['VIEWS'];
   $data = ['_params'=>$params];
   if(isset(Controller::$viewData)){
     $data = array_merge($data,Controller::$viewData);

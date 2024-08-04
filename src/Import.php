@@ -59,6 +59,7 @@ class Import
   if(!isset($options['cache'])){
    $options = array_merge($options,self::$paths['default']['options']);
   }
+  $options['cache'] = $options['cache'].md5('_'.$ex[0]); 
 
   $argv = ['name' => (isset($ex[1]) ? $ex[1] : $path),'path' => $getPath['path'],
   'options' => $options];
